@@ -1,0 +1,100 @@
+:root {
+  /* --primary: #695cfe;
+    --primary_hover: #4c43b8; */
+
+  /* ######## colors ######## */
+  --body-color: #efe9f7;
+  --light-box: #fff;
+  --primary: #00a088;
+  --primary_hover: #00e7c4;
+  --primary-light: #f6f5ff;
+  --toggle: #ddd;
+  --text: #707070;
+  --ligt-text: #ffffff;
+  --shadow: #00000030;
+  --tomato: tomato;
+  --blue: blue;
+  --skyblue: skyblue;
+  --black-text: #000;
+  --input-color: #000;
+  --download: #695cfe;
+
+  /* ######## times ######## */
+  --tran-01: all 0.2s ease;
+  --tran-02: all 0.3s ease;
+  --tran-03: all 0.5s ease;
+}
+
+.settings {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  color: var(--text);
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+}
+
+form p {
+  font-size: 20px;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+form input[type="submit"] {
+  background-color: var(--primary);
+  font-weight: bold;
+  color: var(--ligt-text);
+  cursor: pointer;
+  transition: var(--tran-02);
+}
+
+form input[type="submit"]:hover {
+  background-color: var(--primary_hover);
+  scale: 98%;
+  box-shadow: 0 5px 10px var(--shadow);
+}
+
+.filters ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit {
+  background-color: var(--primary);
+  color: var(--ligt-text);
+  font-weight: bold;
+  padding: 8px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--tran-02);
+}
+
+.edit:hover {
+  background-color: var(--primary_hover);
+  box-shadow: 0 0 10px var(--shadow);
+  scale: 98%;
+}
+
+.adminslist {
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.adminslist::-webkit-scrollbar {
+  width: 0;
+}

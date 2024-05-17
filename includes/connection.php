@@ -1,7 +1,7 @@
 <?php
 $dbhost      =   "localhost";
-$dbuser      =   "root";
-$dbpassword  =   "";
+$dbuser      =   "ayeshmantha";
+$dbpassword  =   "111111";
 $dbname      =   "student_management";
 
 $connection =   mysqli_connect($dbhost, $dbuser, $dbpassword, $dbname);

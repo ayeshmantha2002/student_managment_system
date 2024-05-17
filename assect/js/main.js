@@ -14,4 +14,25 @@ $(document).ready(function () {
       sidenav = true;
     }
   });
+
+  $("#add_year").click(function () {
+    $(".add_class_page").css("z-index", "1");
+    $(".add_class_page").css("opacity", "1");
+  });
+
+  $("#add_class").click(function () {
+    $(".add_class_time").css("z-index", "1");
+    $(".add_class_time").css("opacity", "1");
+  });
+
+  $("#view_more").click(function () {
+    $(".view_more").css("z-index", "1");
+    $(".view_more").css("opacity", "1");
+  });
+
+  $(".close_btn").click(function () {
+    $(".popup_forms").css("z-index", "-2");
+    $(".popup_forms").css("opacity", "0");
+    $(".update_students").css("display", "none");
+  });
 });

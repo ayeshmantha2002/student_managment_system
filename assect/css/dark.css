@@ -1,0 +1,40 @@
+:root {
+  /* ######## dark colos ######## */
+
+  --body-color: #161616;
+  --light-box: #000000;
+  --primary: #003f36;
+  --primary_hover: #007c6a;
+  --primary-light: #001a16;
+  --toggle: #ddd;
+  --text: #ffffff;
+  --shadow: #6b6b6b30;
+  --tomato: #c00000;
+  --blue: navy;
+  --skyblue: blue;
+  --black-text: #fff;
+  --input-color: #ffffff;
+}
+
+.login_content {
+  color: var(--text);
+}
+
+input,
+select {
+  color: #fff;
+  background-color: var(--body-color);
+}
+
+label {
+  color: #fff;
+}
+
+.adminslist {
+  color: var(--text);
+}
+
+.students input,
+.students select {
+  background-color: var(--light-box);
+}

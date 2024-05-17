@@ -4,30 +4,34 @@ include("includes/connection.php");
 $errors = array();
 $username = "";
 $password = "";
+$cpassword = "";
+$Frist_name = "";
+$Last_name = "";
+$location = "";
 
 $owner = "SELECT * FROM `admin`";
 $owner_result = mysqli_query($connection, $owner);
-if (mysqli_num_rows($owner_result) < 1) {
-    header("location: register.php");
+if (mysqli_num_rows($owner_result) > 0) {
+    header("location: login.php");
 }
 
 if (isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($connection, $_POST['username']);
     $password = mysqli_real_escape_string($connection, $_POST['password']);
     $hass_password = sha1($password);
+    $Frist_name = ucfirst(mysqli_real_escape_string($connection, $_POST['Frist_name']));
+    $Last_name = ucfirst(mysqli_real_escape_string($connection, $_POST['Last_name']));
+    $cpassword = mysqli_real_escape_string($connection, $_POST['cpassword']);
+    $location = ucfirst(mysqli_real_escape_string($connection, $_POST['location']));
 
-    $login = "SELECT * FROM `admin` WHERE (`Username` = '{$username}' AND `Password` = '{$hass_password}') AND (`Position` = 'ADMIN' OR `Position` = 'OWNER') LIMIT 1";
-    $login_result = mysqli_query($connection, $login);
-    if (mysqli_num_rows($login_result) == 1) {
-        $fetch_details = mysqli_fetch_assoc($login_result);
-        $_SESSION['ID'] = $fetch_details['ID'];
-
-        if (isset($_POST['remember'])) {
-            setcookie('ID', $_SESSION['ID'], time() + 60 * 60 * 24 * 20);
+    if ($password == $cpassword) {
+        $register = "INSERT INTO `admin` (`First_name`, `Last_name`, `Username`, `Position`, `Location`, `Password`) VALUES ('{$Frist_name}', '{$Last_name}', '{$username}', 'OWNER', '{$location}', '{$hass_password}')";
+        $register_result = mysqli_query($connection, $register);
+        if ($register_result) {
+            header("location: login.php");
         }
-        header("location: index.php");
     } else {
-        $errors[] = 'Invalied Username or Password';
+        $errors[] = "The password and the confirmation password do not match";
     }
 }
 ?>
@@ -38,7 +42,7 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> LOGIN </title>
+    <title> REGISTER </title>
     <link rel="stylesheet" href="assect/css/style.css">
     <?php
     if (isset($_COOKIE['dark'])) {
@@ -57,7 +61,7 @@ if (isset($_POST['submit'])) {
                 <p> STUDENT MANAGMENT SYSTEM </p>
             </div>
             <div class="form">
-                <h3> LOGIN </h3>
+                <h3> REGISTER </h3>
                 <br>
                 <div style="color: red;">
                     <?php
@@ -71,6 +75,16 @@ if (isset($_POST['submit'])) {
                 <br>
                 <form method="post">
                     <p>
+                        <label for="Frist_name"> Frist name : </label>
+                        <input type="text" placeholder="Frist name" id="Frist_name" name="Frist_name" value="<?php echo $Frist_name ?>">
+                    </p>
+                    <br>
+                    <p>
+                        <label for="Last_name"> Last name : </label>
+                        <input type="text" placeholder="Last name" id="Last_name" name="Last_name" value="<?php echo $Last_name ?>">
+                    </p>
+                    <br>
+                    <p>
                         <label for="username"> Username : </label>
                         <input type="text" placeholder="Username" id="username" name="username" value="<?php echo $username ?>">
                     </p>
@@ -81,11 +95,17 @@ if (isset($_POST['submit'])) {
                     </p>
                     <br>
                     <p>
-                        <input type="checkbox" name="remember" id="remember"> <label for="remember">Remember me.</label>
+                        <label for="cpassword"> Confirm Password : </label>
+                        <input type="password" placeholder="cPassword" id="cpassword" name="cpassword" value="<?php echo $cpassword ?>">
                     </p>
                     <br>
                     <p>
-                        <input type="submit" value="LOGIN" name="submit">
+                        <label for="location"> Branch location : </label>
+                        <input type="location" placeholder="Branch Location" id="location" name="location" value="<?php echo $location ?>">
+                    </p>
+                    <br>
+                    <p>
+                        <input type="submit" value="REGISTER" name="submit">
                     </p>
                 </form>
             </div>

@@ -44,7 +44,7 @@
                 <li class="nav-link">
                     <a href="add-class.php">
                         <img src="assect/img/icons/time-regular-24.png" alt="dash">
-                        <span class="text nav-text"> CLASS DATE </span>
+                        <span class="text nav-text"> CLASS </span>
                     </a>
                 </li>
                 <li class="nav-link">

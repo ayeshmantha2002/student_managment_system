@@ -16,25 +16,28 @@
   --blue: blue;
   --skyblue: skyblue;
   --black-text: #000;
+  --input-color: #000;
+  --download: #695cfe;
 
   /* ######## times ######## */
   --tran-01: all 0.2s ease;
   --tran-02: all 0.3s ease;
   --tran-03: all 0.5s ease;
+}
 
-  /* ######## dark colos ######## */
-  /* --body-color: #000000ee;
-  --light-box: #000000;
-  --primary: #003f36;
-  --primary_hover: #007c6a;
-  --primary-light: #001a16;
-  --toggle: #ddd;
-  --text: #ffffff;
-  --shadow: #6b6b6b30;
-  --tomato: #c00000;
-  --blue: navy;
-  --skyblue: blue;
-  --black-text: #fff; */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 2px;
+  cursor: pointer;
 }
 
 * {
@@ -195,7 +198,7 @@ hr {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 20px;
+  grid-gap: 20px;
   padding: 20px 0;
   box-sizing: border-box;
 }
@@ -207,7 +210,7 @@ hr {
   border-radius: 6px;
   padding: 10px;
   box-sizing: border-box;
-  box-shadow: 0 0 20px var(--shadow);
+  box-shadow: 0 0 10px var(--shadow);
 }
 
 .indicators .box h2,
@@ -218,13 +221,13 @@ hr {
 .indicators_dash {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 20px;
+  grid-gap: 20px;
 }
 
 .indicators_dash .lg_box {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-gap: 20px;
 }
 
 .lg_box .box {
@@ -247,6 +250,7 @@ hr {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .date {
@@ -260,6 +264,59 @@ hr {
   padding: 20px 20px 0 0;
   box-sizing: border-box;
   color: var(--text);
+}
+
+.lg_box .box .notes .note {
+  max-height: 400px;
+  overflow-y: scroll;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.lg_box .box .notes .note::-webkit-scrollbar {
+  width: 0;
+}
+
+.lg_box .box .notes div ul li {
+  display: grid;
+  grid-template-columns: 1fr 6fr 0.5fr;
+  grid-gap: 30px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  transition: var(--tran-02);
+  scale: 98%;
+}
+
+.lg_box .box .notes div ul li:hover {
+  box-shadow: 0 5px 10px var(--shadow);
+  scale: 102%;
+  cursor: context-menu;
+}
+
+.st_id {
+  font-weight: bold;
+  width: 180px;
+}
+
+.note_details {
+  text-align: justify;
+  font-size: 18px;
+}
+
+.del {
+  width: 50px;
+}
+
+.create_button {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  margin: auto;
 }
 
 /* ======== login / register ======== */
@@ -280,8 +337,9 @@ hr {
   padding: 30px;
   box-sizing: border-box;
   border-radius: 10px;
-  display: flex;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 40px;
   text-align: center;
   box-shadow: 0 0 20px var(--shadow);
   align-items: center;
@@ -320,7 +378,7 @@ hr {
 
 .form form input[type="submit"] {
   background-color: var(--primary);
-  color: var(--light-box);
+  color: var(--ligt-text);
   font-weight: bold;
   cursor: pointer;
   transition: var(--tran-02);
@@ -328,6 +386,7 @@ hr {
 
 .form form input[type="checkbox"] {
   width: 20px;
+  cursor: pointer;
 }
 
 .form form input[type="submit"]:hover {
@@ -343,7 +402,7 @@ hr {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  gap: 30px;
+  column-gap: 10px;
 }
 
 .box .cl_list a {
@@ -387,7 +446,7 @@ hr {
   border-radius: 5px;
   text-align: center;
   font-weight: bold;
-  color: var(--light-box);
+  color: var(--ligt-text);
   text-decoration: none;
   transition: var(--tran-02);
 }
@@ -404,7 +463,7 @@ hr {
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 3fr;
-  gap: 30px;
+  grid-gap: 30px;
 }
 
 .filters {
@@ -432,9 +491,10 @@ hr {
   text-align: center;
   width: 100%;
   padding: 15px 10px;
+  box-sizing: border-box;
   border-radius: 5px;
   background-color: var(--primary);
-  color: var(--light-box);
+  color: var(--ligt-text);
   font-weight: bold;
   text-decoration: none;
   transition: var(--tran-02);
@@ -453,7 +513,7 @@ hr {
 
 .filters form input[type="submit"] {
   background-color: var(--primary);
-  color: var(--light-box);
+  color: var(--ligt-text);
   font-weight: bold;
   cursor: pointer;
   transition: var(--tran-02);
@@ -466,38 +526,52 @@ hr {
   box-shadow: 0 0 20px var(--shadow);
 }
 
-.students {
-  height: calc(100vh - 160px);
-  overflow: hidden;
-  overflow-y: scroll;
-  border-left: 1px solid var(--shadow);
-  padding: 0 30px;
+.filters form input[type="checkbox"] {
+  width: 20px;
 }
 
-.students table {
+.students {
+  width: 100%;
+  height: calc(100vh - 160px);
+  overflow: scroll;
+  border-left: 1px solid var(--shadow);
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+table {
   width: 100%;
   border-collapse: collapse;
   color: var(--black-text);
+  table-layout: auto;
 }
 
-.students table tr {
+table tr {
   transition: var(--tran-02);
 }
 
-.students table tr th {
+table tr th {
   background-color: var(--primary-light);
   height: 50px;
   text-align: left;
+  min-width: 100px;
 }
 
-.students table tr th,
-.students table tr td {
+table tr th,
+table tr td {
   padding: 8px;
   box-sizing: border-box;
   /* border: 1px solid var(--text); */
 }
 
-.students table tr td a {
+.filters table tr th,
+.filters table tr td {
+  padding: 15px 8px;
+  box-sizing: border-box;
+  /* border: 1px solid var(--text); */
+}
+
+table tr td a {
   padding: 5px 15px;
   background-color: var(--blue);
   text-decoration: none;
@@ -507,31 +581,52 @@ hr {
   transition: var(--tran-02);
 }
 
-.students table tr td .delete a {
+table tr td .view a {
+  background-color: var(--primary);
+  color: var(--ligt-text);
+}
+
+table tr td .view a:hover {
+  background-color: var(--primary_hover);
+}
+
+table tr td .delete a {
   background-color: var(--tomato);
   color: var(--ligt-text);
 }
 
-.students table tr td a:hover {
+table tr td a:hover {
   scale: 95%;
   box-shadow: 0 0 20px var(--shadow);
   background-color: var(--skyblue);
 }
 
-.students table tr td .delete a:hover {
+table tr td .delete a:hover {
   background-color: red;
 }
 
-.students table tr:nth-child(odd) {
+table tr:nth-child(odd) {
   background-color: var(--light-box);
 }
 
-.students table tr:hover {
+table tr:hover {
   background-color: var(--shadow);
 }
 
 .students::-webkit-scrollbar {
+  height: 12px;
   width: 0;
+}
+
+.students::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 2px;
+}
+
+.students::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 2px;
+  cursor: pointer;
 }
 
 .content .search form {
@@ -548,4 +643,363 @@ hr {
   outline: none;
   background-color: var(--light-box);
   box-shadow: 0 0 20px var(--shadow);
+}
+
+.popup_forms,
+.update_students {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: -2;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  transition: var(--tran-03);
+  opacity: 0;
+}
+
+.popup_forms .pop_form {
+  width: 95%;
+  max-width: 500px;
+  background-color: var(--light-box);
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 0 0 20px var(--shadow);
+  color: var(--text);
+}
+
+.close_btn {
+  text-align: right;
+  cursor: pointer;
+}
+
+.close_btn img {
+  width: 30px;
+  transition: var(--tran-02);
+}
+
+.close_btn img:hover {
+  rotate: -180deg;
+  scale: 120%;
+}
+
+.popup_forms .pop_form form input,
+.popup_forms .pop_form form select,
+.update_students form input,
+.update_students form select {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background-color: var(--body-color);
+  border-radius: 5px;
+  color: var(--input-color);
+}
+
+.popup_forms .pop_form form input[type="submit"],
+.update_students form input[type="submit"] {
+  background-color: var(--primary);
+  color: var(--ligt-text);
+  font-weight: bold;
+  transition: var(--tran-02);
+}
+
+.popup_forms .pop_form form input[type="submit"]:hover,
+.update_students form input[type="submit"]:hover {
+  background-color: var(--primary_hover);
+  cursor: pointer;
+}
+
+.update_students form {
+  width: 90%;
+  max-width: 500px;
+  background-color: var(--light-box);
+  padding: 30px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: 10px 10px 20px var(--shadow);
+}
+
+.update_students form h2 {
+  color: var(--text);
+  text-align: center;
+}
+
+.pop_form a {
+  padding: 10px;
+  box-sizing: border-box;
+  font-weight: bold;
+  background-color: var(--primary);
+  color: var(--ligt-text);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: var(--tran-02);
+}
+
+.pop_form a:hover {
+  background-color: var(--primary_hover);
+  scale: 95%;
+}
+
+.student_details {
+  width: 100%;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.student_details img {
+  width: 150px;
+}
+
+.st_details p {
+  color: var(--text);
+  font-size: 20px;
+}
+
+.st_details p span {
+  color: var(--black-text);
+  font-weight: bold;
+}
+
+.old_update {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  grid-gap: 30px;
+}
+
+.old_details {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  border-right: 1px solid var(--shadow);
+  color: var(--text);
+  padding-right: 30px;
+  box-sizing: border-box;
+}
+
+.old_details ul li {
+  list-style: none;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.paid {
+  font-weight: bold;
+  color: green;
+}
+
+table .paid {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.updates form input[type="checkbox"] {
+  width: auto;
+}
+
+.updates form select {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+.updates form input[type="submit"] {
+  background-color: var(--primary);
+  font-weight: bold;
+  color: var(--ligt-text);
+  padding: 12px;
+  cursor: pointer;
+  transition: var(--tran-02);
+}
+
+.updates form input[type="submit"]:hover {
+  background-color: var(--primary_hover);
+  scale: 95%;
+}
+
+.class_list {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text);
+}
+
+#class_list {
+  overflow: hidden;
+  height: calc(100% - 10px);
+  overflow-y: scroll;
+}
+
+#class_list::-webkit-scrollbar {
+  width: 0;
+}
+
+.class_list p {
+  padding: 15px 10px;
+  box-sizing: border-box;
+}
+
+.class_list a {
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: var(--primary);
+  color: var(--ligt-text);
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: var(--tran-02);
+}
+
+.class_list a:hover {
+  background-color: var(--primary_hover);
+}
+
+.students .details {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-gap: 30px;
+}
+
+#attendance_details {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding-left: 30px;
+  border-left: 1px solid var(--shadow);
+  color: var(--text);
+}
+
+.attendance_filter p {
+  position: relative;
+}
+
+.attendance_filter p a {
+  position: absolute;
+  width: 100%;
+  background-color: blue;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--ligt-text);
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  transition: var(--tran-02);
+}
+
+.attendance_filter p a:hover {
+  background-color: var(--primary);
+  box-shadow: 0 0 20px var(--shadow);
+  scale: 90%;
+}
+
+.attendance_filter h2 {
+  text-align: center;
+}
+
+.attendance_filter form input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background-color: var(--primary);
+  cursor: pointer;
+  transition: var(--tran-02);
+  color: var(--ligt-text);
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.attendance_filter form input:hover {
+  background-color: var(--primary_hover);
+  scale: 95%;
+  box-shadow: 0 0 20px var(--shadow);
+}
+
+.view_more .box {
+  max-height: 500px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.view_more .box::-webkit-scrollbar {
+  width: 0;
+}
+
+.tb_alin {
+  height: 100vh;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.tb_alin::-webkit-scrollbar {
+  width: 0;
+}
+
+.location_form form p input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid var(--shadow);
+}
+
+.location_form form p input[type="submit"] {
+  background-color: var(--primary);
+  color: var(--ligt-text);
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--tran-02);
+  border-radius: 5px;
+}
+
+.location_form form p input[type="submit"]:hover {
+  background-color: var(--primary_hover);
+  scale: 98%;
+  box-shadow: 0 0 20px var(--shadow);
+}
+
+button {
+  background-color: tomato;
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--ligt-text);
+  font-weight: bold;
+  border-radius: 5px;
+  transition: var(--tran-02);
+}
+
+button:hover {
+  background-color: red;
+  box-shadow: 0 0 10px var(--shadow);
+  scale: 108%;
 }
