@@ -38,19 +38,67 @@ if ($_POST['download']) {
         }
     }
 
-
-
     // attendance list 
     $st_list = "SELECT * FROM `student` WHERE (`Student_ID` LIKE '{$class_code}%') AND `Class` = '{$Class}'";
     $st_list_result = mysqli_query($connection, $st_list);
 
+    // total student list 
+    $count_st_list = "SELECT * FROM `student` WHERE (`Student_ID` LIKE '{$class_code}%') AND `Class` = '{$Class}'";
+    $count_st_list_result = mysqli_query($connection, $count_st_list);
+    if ($count_st_list_result) {
+        $total_st = mysqli_num_rows($count_st_list_result);
+    }
+
+    // count today attendance
+    $count_attendance = "SELECT * FROM `attendance` WHERE (`Student_ID` LIKE '{$class_code}%') AND `Class` = '{$Class}' AND `Date` = '{$Date}' AND `Type` = '{$Type}'";
+    $count_attendance_result = mysqli_query($connection, $count_attendance);
+    if ($count_attendance_result) {
+        $total_attendance = mysqli_num_rows($count_attendance_result);
+    }
+
+    // count tutes
+    $count_tutes = "SELECT * FROM `deliverd_tute` WHERE (`Student_ID` LIKE '{$class_code}%') AND `Class` = '{$Class}' AND `Date` = '{$Date}'";
+    $count_tutes_result = mysqli_query($connection, $count_tutes);
+    if ($count_tutes_result) {
+        $total_tutes = mysqli_num_rows($count_tutes_result);
+    }
+
+    // count Fees
+    $count_fees = "SELECT * FROM `class_fees` WHERE (`Student_ID` LIKE '{$class_code}%') AND `Class` = '{$Class}' AND `Date` = '{$Date}'";
+    $count_fees_result = mysqli_query($connection, $count_fees);
+    if ($count_fees_result) {
+        $total_fees = mysqli_num_rows($count_fees_result);
+    }
+
+    $absent = $total_st - $total_attendance;
+
+    echo "<table>
+                <tr>
+                    <th colspan='5'> {$Date}  </th>
+                </tr>
+                <tr>
+                    <th> Today attendance : </th>
+                    <th> $total_attendance </th>
+                </tr>        
+                <tr>
+                    <th> Today absent : </th>
+                    <th> $absent </th>
+                </tr>        
+                <tr>
+                    <th> Tute delivery today : </th>
+                    <th> $total_tutes </th>
+                </tr>        
+                <tr>
+                    <th> Number of cards today : </th>
+                    <th> $total_fees </th>
+                </tr>        
+            </table>";
+
+    echo "<br><br>";
 
     if (mysqli_num_rows($st_list_result) > 0) {
         $output = "
             <table>
-                <tr>
-                    <th colspan='5'> {$Date}  </th>
-                </tr>
                 <tr>
                     <th> Student ID </th>
                     <th> Student Name </th>

@@ -21,7 +21,7 @@ if (isset($_POST['dark'])) {
 }
 
 // admin list
-$admin_list = "SELECT * FROM `admin` WHERE `Position` = 'OWNER'";
+$admin_list = "SELECT * FROM `admin` WHERE `Position` != 'OWNER'";
 $admin_list_result = mysqli_query($connection, $admin_list);
 
 // fetch admin personal details 
@@ -188,7 +188,7 @@ if (isset($_POST['branch_delete_id'])) {
                                     echo "
                                     <form method='post'>
                                     <input type='text' name='del_id' value='{$fetch_admins['ID']}' hidden>
-                                    <li> <span> {$fetch_admins['First_name']} {$fetch_admins['Last_name']} </span> <span>Bandarawela</span> <span {$hidden}> <button type='submit'> delete </button> </span> </li>
+                                    <li> <span> {$fetch_admins['First_name']} {$fetch_admins['Last_name']} </span> <span> {$fetch_admins['Location']} </span> <span {$hidden}> <button type='submit'> delete </button> </span> </li>
                                     </form>
                                     ";
                                 }
@@ -208,7 +208,7 @@ if (isset($_POST['branch_delete_id'])) {
                                     echo "
                                     <form method='post'>
                                         <input type='text' name='branch_delete_id' value='{$branches['ID']}' hidden>
-                                        <li> <span> {$branches['location']} </span> <span> {$branches['UID']} </span> <button type='submit'> delete </button></li>
+                                        <li> <span> {$branches['location']} </span> <span> {$branches['UID']} </span> <button type='submit' {$hidden}> delete </button></li>
                                     </form>
                                     ";
                                 }

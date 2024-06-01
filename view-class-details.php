@@ -88,6 +88,13 @@ if ($count_tutes_result) {
     $total_tutes = mysqli_num_rows($count_tutes_result);
 }
 
+// count Fees
+$count_fees = "SELECT * FROM `class_fees` WHERE (`Student_ID` LIKE '{$class_code}%') AND `Class` = '{$Class}' AND `Date` = '{$Date}'";
+$count_fees_result = mysqli_query($connection, $count_fees);
+if ($count_fees_result) {
+    $total_fees = mysqli_num_rows($count_fees_result);
+}
+
 // filter option 
 if (isset($_POST['present'])) {
     $absent = "none";
@@ -242,6 +249,8 @@ if (isset($_POST['absent'])) {
                                 <h3> Today absent : <?= $total_st - $total_attendance; ?> </h3>
                                 <br>
                                 <h3> Tute delivery today : <?= $total_tutes; ?> </h3>
+                                <br>
+                                <h3> Number of cards today : <?= $total_fees; ?> </h3>
                             </div>
                             <div class="attendance_filter">
                                 <h2> Filter Option </h2>

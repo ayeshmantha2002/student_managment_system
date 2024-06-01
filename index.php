@@ -105,7 +105,7 @@ if (isset($_GET['delete_note'])) {
                                     $total = 0;
                                     while ($fetch_branchLocations = mysqli_fetch_assoc($branchLocations_result)) {
                                         $UID = $fetch_branchLocations['UID'];
-                                        // total admin count
+                                        // total students count
                                         $classOne_Query = "SELECT `Student_ID` FROM `student` WHERE (`Student_ID` LIKE '{$UID}%') AND `Class` = '{$class1}'";
                                         $classOne_Query_result = mysqli_query($connection, $classOne_Query);
 
@@ -151,7 +151,8 @@ if (isset($_GET['delete_note'])) {
                                     if (mysqli_num_rows($branchLocations_result) > 0) {
                                         $total = 0;
                                         while ($fetch_branchLocations = mysqli_fetch_assoc($branchLocations_result)) {
-                                            // total admin count
+                                            $UID = $fetch_branchLocations['UID'];
+                                            // total students count
                                             $classOne_Query = "SELECT `Student_ID` FROM `student` WHERE (`Student_ID` LIKE '{$UID}%') AND `Class` = '{$class2}'";
                                             $classOne_Query_result = mysqli_query($connection, $classOne_Query);
 
@@ -228,7 +229,14 @@ if (isset($_GET['delete_note'])) {
                                         <img src="assect/img/imgs/admin.png" alt="user">
                                     </div>
                                 </div>
-                                <div class="box"></div>
+                                <div class="box" style="display: flex; align-items: center; justify-content: center; text-align: center;">
+                                    <?php
+                                    $total_st = "SELECT * FROM `student`";
+                                    $total_st_result = mysqli_query($connection, $total_st);
+                                    $total_st_count = mysqli_num_rows($total_st_result);
+                                    ?>
+                                    <h1> Total students : <?= $total_st_count; ?> </h1>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -325,12 +333,12 @@ if (isset($_GET['delete_note'])) {
                                     <form method="post">
                                         <p>
                                             <label for="location"> Branch Location : </label>
-                                            <input type="text" placeholder="Branch Location" name="location" id="location">
+                                            <input type="text" placeholder="Branch Location" name="location" id="location" required>
                                         </p>
                                         <br>
                                         <p>
                                             <label for="code"> Class Code : </label>
-                                            <input type="text" placeholder="Class Code" name="code" id="code">
+                                            <input type="text" placeholder="Class Code" name="code" id="code" required>
                                         </p>
                                         <br>
                                         <p>

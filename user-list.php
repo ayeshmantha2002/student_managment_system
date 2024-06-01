@@ -21,6 +21,7 @@ include("includes/connection.php");
 // add new student 
 if (isset($_POST['add_student'])) {
     $st_id = strtoupper(mysqli_real_escape_string($connection, $_POST['st_id']));
+    setcookie('st_id', $st_id, time() + 60 * 60 * 24 * 20);
     $fname = ucfirst(mysqli_real_escape_string($connection, $_POST['fname']));
     $Lname = ucfirst(mysqli_real_escape_string($connection, $_POST['Lname']));
     $year = mysqli_real_escape_string($connection, $_POST['year']);
@@ -206,7 +207,13 @@ if (isset($_GET['remove_student_id'])) {
                         <form method="post">
                             <p>
                                 <label for="st_id"> Student ID : </label>
-                                <input type="text" name="st_id" id="st_id" placeholder="Student ID" value="<?php echo $st_id; ?>" required>
+                                <input type="text" name="st_id" id="st_id" placeholder="Student ID" value="<?php
+                                                                                                            if (isset($_COOKIE['st_id'])) {
+                                                                                                                echo $_COOKIE['st_id'];
+                                                                                                            } else {
+                                                                                                                echo $st_id;
+                                                                                                            }
+                                                                                                            ?>" required>
                             </p>
                             <br>
                             <p>
