@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 17, 2024 at 04:54 PM
+-- Generation Time: Jun 01, 2024 at 12:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,13 +39,6 @@ CREATE TABLE `admin` (
   `Last_login` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `admin`
---
-
-INSERT INTO `admin` (`ID`, `First_name`, `Last_name`, `Username`, `Position`, `Location`, `Password`, `Register_date`, `Last_login`) VALUES
-(1, 'Sameera', 'Ayeshmantha', 'ayeshmantha2002@gmail.com', 'OWNER', 'Badulla', 'a642a77abd7d4f51bf9226ceaf891fcbb5b299b8', '2024-05-17 18:33:14.531907', '2024-05-17 20:15:34');
-
 -- --------------------------------------------------------
 
 --
@@ -64,13 +57,6 @@ CREATE TABLE `attendance` (
   `Note_status` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `attendance`
---
-
-INSERT INTO `attendance` (`ID`, `Student_ID`, `Name`, `Class`, `Type`, `Location`, `Date`, `Note`, `Note_status`) VALUES
-(2, 'BW001', 'Sameera Weerawanni', '2024', 'T', 'Bandarawela', '2024-05-17', 'ada athul una aluth lamayek meya. tute eka dunne na', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -81,14 +67,6 @@ CREATE TABLE `class` (
   `ID` int(255) NOT NULL,
   `Year` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `class`
---
-
-INSERT INTO `class` (`ID`, `Year`) VALUES
-(0, 2024),
-(0, 2025);
 
 -- --------------------------------------------------------
 
@@ -103,13 +81,6 @@ CREATE TABLE `class_date` (
   `Type` varchar(100) NOT NULL,
   `Date` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `class_date`
---
-
-INSERT INTO `class_date` (`ID`, `Class`, `Location`, `Type`, `Date`) VALUES
-(2, '2024', 'Bandarawela', 'T', '2024-05-17');
 
 -- --------------------------------------------------------
 
@@ -127,13 +98,6 @@ CREATE TABLE `class_fees` (
   `Date` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `class_fees`
---
-
-INSERT INTO `class_fees` (`ID`, `ST_ID`, `Student_ID`, `Class`, `Year_month`, `ST_name`, `Date`) VALUES
-(0, 1, 'BW001', '2024', '2024 January', '', '2024-05-17');
-
 -- --------------------------------------------------------
 
 --
@@ -150,13 +114,6 @@ CREATE TABLE `deliverd_tute` (
   `Date` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `deliverd_tute`
---
-
-INSERT INTO `deliverd_tute` (`ID`, `Tute_ID`, `ST_ID`, `Student_ID`, `Class`, `ST_name`, `Date`) VALUES
-(0, 1, 1, 'BW001', '2024', 'Sameera Weerawanni', '2024-05-17');
-
 -- --------------------------------------------------------
 
 --
@@ -168,14 +125,6 @@ CREATE TABLE `location` (
   `location` varchar(100) NOT NULL,
   `UID` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `location`
---
-
-INSERT INTO `location` (`ID`, `location`, `UID`) VALUES
-(3, 'Badulla', 'BD'),
-(4, 'Bandarawela', 'BW');
 
 -- --------------------------------------------------------
 
@@ -195,13 +144,6 @@ CREATE TABLE `student` (
   `Status` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `student`
---
-
-INSERT INTO `student` (`ID`, `Student_ID`, `First_name`, `Last_name`, `Class`, `Phone_number`, `Register_date`, `Pro-pic`, `Status`) VALUES
-(1, 'BW001', 'Sameera', 'Weerawanni', '2024', '711596479', '2024-05-17', NULL, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -219,13 +161,6 @@ CREATE TABLE `tutes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tutes`
---
-
-INSERT INTO `tutes` (`ID`, `Tute_name`, `Class`, `Start_date`, `Counte`, `Delivered`, `Action`) VALUES
-(1, 'Organic', '2024', 2024, 20, 1, 1);
-
---
 -- Indexes for dumped tables
 --
 
@@ -239,6 +174,12 @@ ALTER TABLE `admin`
 -- Indexes for table `attendance`
 --
 ALTER TABLE `attendance`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `class`
+--
+ALTER TABLE `class`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -273,37 +214,43 @@ ALTER TABLE `tutes`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `ID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `class`
+--
+ALTER TABLE `class`
+  MODIFY `ID` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `class_date`
 --
 ALTER TABLE `class_date`
-  MODIFY `ID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tutes`
 --
 ALTER TABLE `tutes`
-  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
