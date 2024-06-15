@@ -268,6 +268,7 @@ if (isset($_COOKIE['cookieClass'])) {
                 $fees_next_insert_result = mysqli_query($connection, $fees_next_insert);
             }
 
+            // today tute
             if (!isset($_POST['tname']) || strlen(trim($_POST['tname'])) < 1) {
             } else {
                 $tname = mysqli_real_escape_string($connection, $_POST['tname']);
@@ -289,6 +290,28 @@ if (isset($_COOKIE['cookieClass'])) {
                 $count_tutes_result = mysqli_query($connection, $count_tutes);
             }
 
+            // last tute
+            if (!isset($_POST['oldtname']) || strlen(trim($_POST['oldtname'])) < 1) {
+            } else {
+                $oldtname = mysqli_real_escape_string($connection, $_POST['oldtname']);
+                $oldtname_insert = "INSERT INTO `deliverd_tute` (`Tute_ID`, `ST_ID`, `Student_ID`, `Class`, `ST_name`, `Date`) VALUES ('{$oldtname}', '{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$_COOKIE['full_name']}', '{$today_date}')";
+                $oldtname_insert_result = mysqli_query($connection, $oldtname_insert);
+
+                // tutes deliverd count
+                $tutes_deliverd_count = "SELECT `Delivered` FROM `tutes` WHERE `ID` = {$oldtname}";
+                $tutes_deliverd_count_result = mysqli_query($connection, $tutes_deliverd_count);
+                if (mysqli_num_rows($tutes_deliverd_count_result) == 1) {
+                    $deliverd = mysqli_fetch_assoc($tutes_deliverd_count_result);
+                    $deli = $deliverd['Delivered'];
+
+                    $update_count = $deli + 1;
+                }
+
+                // update count
+                $count_tutes = "UPDATE `tutes` SET `Delivered` = {$update_count} WHERE `ID` = {$oldtname}";
+                $count_tutes_result = mysqli_query($connection, $count_tutes);
+            }
+
             if ($insert_attendance_result) {
                 header("location: attendance.php");
 
@@ -300,7 +323,7 @@ if (isset($_COOKIE['cookieClass'])) {
         }
     }
     // last tute details fetch
-    $last_tute = "SELECT * FROM `deliverd_tute` WHERE `Class` = '{$_COOKIE['cookieClass']}' ORDER BY `Tute_ID` DESC LIMIT 1";
+    $last_tute = "SELECT * FROM `deliverd_tute` WHERE `Class` = '{$_COOKIE['cookieClass']}' AND `Date` != '{$today_date}' ORDER BY `Tute_ID` DESC LIMIT 1";
     $last_tute_result = mysqli_query($connection, $last_tute);
     if (mysqli_num_rows($last_tute_result) == 1) {
         $last_tute_fetch = mysqli_fetch_assoc($last_tute_result);
@@ -396,7 +419,6 @@ if (isset($_COOKIE['cookieClass'])) {
                         <br>
                         <p class="view_tute">
                             <select class="view_tute" name="tnamecoocie" id="tnamecoocie">
-                                <option value=""> Choose tute </option>
                                 <?php
                                 // tutes li
                                 $li_tute = "SELECT * FROM `tutes` WHERE `Action` = 1 AND `Start_date` <= '{$today_date}'";
@@ -533,7 +555,7 @@ if (isset($_COOKIE['cookieClass'])) {
                                     </p>
                                     <br>
                                     <p style="display: <?= $display_input; ?>;">
-                                        <input type="radio" name="tname" id="befor_tute" value="<?= $last_tute_ID ?>">
+                                        <input type="checkbox" name="oldtname" id="befor_tute" value="<?= $last_tute_ID ?>">
                                         <label for="befor_tute" style="cursor: pointer;"> : <?= $ttt_name; ?> </label>
                                     </p>
                                     <br>
