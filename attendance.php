@@ -6,6 +6,95 @@ if (isset($_COOKIE['ID'])) {
     header("location: login.php?login_first");
 }
 
+$last_month = date("m") - 1;
+$this_month = date("m");
+$next_month = date("m") + 1;
+$last_year = date("Y");
+$this_year = date("Y");
+$next_year = date("Y");
+
+if ($last_month == 0) {
+    $last_year = date("Y") - 1;
+    $last_month_name = "December";
+} elseif ($last_month == 1) {
+    $last_month_name = "January";
+} elseif ($last_month == 2) {
+    $last_month_name = "February";
+} elseif ($last_month == 3) {
+    $last_month_name = "March";
+} elseif ($last_month == 4) {
+    $last_month_name = "April";
+} elseif ($last_month == 5) {
+    $last_month_name = "May";
+} elseif ($last_month == 6) {
+    $last_month_name = "June";
+} elseif ($last_month == 7) {
+    $last_month_name = "July";
+} elseif ($last_month == 8) {
+    $last_month_name = "August";
+} elseif ($last_month == 9) {
+    $last_month_name = "September";
+} elseif ($last_month == 10) {
+    $last_month_name = "October";
+} elseif ($last_month == 11) {
+    $last_month_name = "November";
+}
+
+
+if ($this_month == 1) {
+    $this_month_name = "January";
+} elseif ($this_month == 2) {
+    $this_month_name = "February";
+} elseif ($this_month == 3) {
+    $this_month_name = "March";
+} elseif ($this_month == 4) {
+    $this_month_name = "April";
+} elseif ($this_month == 5) {
+    $this_month_name = "May";
+} elseif ($this_month == 6) {
+    $this_month_name = "June";
+} elseif ($this_month == 7) {
+    $this_month_name = "July";
+} elseif ($this_month == 8) {
+    $this_month_name = "August";
+} elseif ($this_month == 9) {
+    $this_month_name = "September";
+} elseif ($this_month == 10) {
+    $this_month_name = "October";
+} elseif ($this_month == 11) {
+    $this_month_name = "November";
+} elseif ($this_month == 12) {
+    $this_month_name = "December";
+}
+
+
+if ($next_month == 2) {
+    $next_month_name = "February";
+} elseif ($next_month == 3) {
+    $next_month_name = "March";
+} elseif ($next_month == 4) {
+    $next_month_name = "April";
+} elseif ($next_month == 5) {
+    $next_month_name = "May";
+} elseif ($next_month == 6) {
+    $next_month_name = "June";
+} elseif ($next_month == 7) {
+    $next_month_name = "July";
+} elseif ($next_month == 8) {
+    $next_month_name = "August";
+} elseif ($next_month == 9) {
+    $next_month_name = "September";
+} elseif ($next_month == 10) {
+    $next_month_name = "October";
+} elseif ($next_month == 11) {
+    $next_month_name = "November";
+} elseif ($next_month == 12) {
+    $next_month_name = "December";
+} elseif ($next_month == 13) {
+    $next_month_name = "January";
+    $next_year = date("Y") + 1;
+}
+
 include("includes/connection.php");
 
 //set cookie
@@ -24,6 +113,9 @@ if (isset($_GET['start_attendance'])) {
         setcookie('cookieClass', $cookieClass, time() + 60 * 60 * 12);
         setcookie('cookieLocation', $cookieLocation, time() + 60 * 60 * 12);
         setcookie('cookieType', $cookieType, time() + 60 * 60 * 12);
+        if (isset($_GET['tnamecoocie']) && !empty($_GET['tnamecoocie'])) {
+            setcookie('cookieTuteName', $_GET['tnamecoocie'], time() + 60 * 60 * 12);
+        }
 
         if (isset($_GET['enable_tutes'])) {
             if ($_GET['enable_tutes'] == 'true') {
@@ -34,12 +126,22 @@ if (isset($_GET['start_attendance'])) {
         }
         header("location: attendance_start.php?start");
     }
+} else {
+    $classID = "";
 }
 
 // give a tute 
 if (isset($_COOKIE['cookieTute'])) {
     $tute = "";
-    $tuteValue = " Giving today ";
+    $tuteName = "SELECT * FROM `tutes` WHERE `ID` = {$_COOKIE['cookieTuteName']}";
+    $tuteName_result = mysqli_query($connection, $tuteName);
+
+    if (mysqli_num_rows($tuteName_result) == 1) {
+        $fetch_name = mysqli_fetch_assoc($tuteName_result);
+        $tute_name_is = $fetch_name['Tute_name'];
+        $tute_year_is = $fetch_name['Class'];
+    }
+    $tuteValue = $tute_year_is . " | " . $tute_name_is;
 } else {
     $tute = "display: none;";
     $tuteValue = " Not today's delivery ";
@@ -51,6 +153,7 @@ if (isset($_GET['clear'])) {
     setcookie('cookieLocation', NULL, -time() + 60 * 60 * 12);
     setcookie('cookieType', NULL, -time() + 60 * 60 * 12);
     setcookie('cookieTute', NULL, -time() + 60 * 60 * 12);
+    setcookie('cookieTuteName', NULL, -time() + 60 * 60 * 12);
 }
 
 
@@ -119,11 +222,8 @@ if (isset($_COOKIE['cookieClass'])) {
         }
     } else {
         $user = "style='display: none;'";
+        $st_id = 0;
     }
-
-    // tutes li
-    $li_tute = "SELECT * FROM `tutes` WHERE `Class` = '{$_COOKIE['cookieClass']}' AND `Action` = 1 AND `Start_date` <= '{$today_date}'";
-    $li_tute_result = mysqli_query($connection, $li_tute);
 
 
     // insert_attendance 
@@ -146,11 +246,26 @@ if (isset($_COOKIE['cookieClass'])) {
             $insert_attendance = "INSERT INTO `attendance` (`Student_ID`, `Name`, `Class`, `Type`, `Location`, `Date`, `Note`, `Note_status`) VALUES ('{$_COOKIE['student_ID']}', '{$_COOKIE['full_name']}', '{$_COOKIE['cookieClass']}', '{$_COOKIE['cookieType']}', '{$_COOKIE['cookieLocation']}', '{$today_date}', '{$note}', {$note_status})";
             $insert_attendance_result = mysqli_query($connection, $insert_attendance);
 
-            if (!isset($_POST['fees']) || strlen(trim($_POST['fees'])) < 1) {
+            // last month fees update
+            if (!isset($_POST['fees_last']) || strlen(trim($_POST['fees_last'])) < 1) {
             } else {
-                $fees = mysqli_real_escape_string($connection, $_POST['fees']);
-                $fees_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees}', '{$today_date}')";
-                $fees_insert_result = mysqli_query($connection, $fees_insert);
+                $fees_last = mysqli_real_escape_string($connection, $_POST['fees_last']);
+                $fees_last_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_last}', '{$today_date}')";
+                $fees_last_insert_result = mysqli_query($connection, $fees_last_insert);
+            }
+            //this month fees update
+            if (!isset($_POST['fees_this']) || strlen(trim($_POST['fees_this'])) < 1) {
+            } else {
+                $fees_this = mysqli_real_escape_string($connection, $_POST['fees_this']);
+                $fees_this_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_this}', '{$today_date}')";
+                $fees_this_insert_result = mysqli_query($connection, $fees_this_insert);
+            }
+            // next month fees update
+            if (!isset($_POST['fees_next']) || strlen(trim($_POST['fees_next'])) < 1) {
+            } else {
+                $fees_next = mysqli_real_escape_string($connection, $_POST['fees_next']);
+                $fees_next_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_next}', '{$today_date}')";
+                $fees_next_insert_result = mysqli_query($connection, $fees_next_insert);
             }
 
             if (!isset($_POST['tname']) || strlen(trim($_POST['tname'])) < 1) {
@@ -184,6 +299,38 @@ if (isset($_COOKIE['cookieClass'])) {
             }
         }
     }
+    // last tute details fetch
+    $last_tute = "SELECT * FROM `deliverd_tute` WHERE `Class` = '{$_COOKIE['cookieClass']}' ORDER BY `Tute_ID` DESC LIMIT 1";
+    $last_tute_result = mysqli_query($connection, $last_tute);
+    if (mysqli_num_rows($last_tute_result) == 1) {
+        $last_tute_fetch = mysqli_fetch_assoc($last_tute_result);
+        $last_tute_ID = $last_tute_fetch['Tute_ID'];
+
+        $ttt = "SELECT `Tute_name` FROM `tutes` WHERE `ID` = {$last_tute_ID}";
+        $ttt_result = mysqli_query($connection, $ttt);
+
+        if (mysqli_num_rows($ttt_result) > 0) {
+            $ttt_fetch = mysqli_fetch_assoc($ttt_result);
+            $ttt_name = $ttt_fetch['Tute_name'];
+        }
+    }
+
+    // check tute
+    $check_tute_user = "SELECT * FROM `deliverd_tute` WHERE `Student_ID` = '{$class_code}{$st_id}' AND `Tute_ID` = {$last_tute_ID}";
+    $check_tute_user_result = mysqli_query($connection, $check_tute_user);
+    if (mysqli_num_rows($check_tute_user_result) > 0) {
+        $display_input = "none";
+    } else {
+        $display_input = "block";
+    }
+} else {
+    // last 3 month fees 
+    $check_fees = "SELECT * FROM `class_fees` WHERE `Student_ID` = '1'";
+    $check_fees_result = mysqli_query($connection, $check_fees);
+
+    // last 3 tutes
+    $check_tutes = "SELECT * FROM `deliverd_tute` WHERE `Student_ID` = '1'";
+    $check_tutes_result = mysqli_query($connection, $check_tutes);
 }
 
 ?>
@@ -247,10 +394,33 @@ if (isset($_COOKIE['cookieClass'])) {
                             <label for="enable_tutes"> : Enable Tutes </label>
                         </p>
                         <br>
+                        <p class="view_tute">
+                            <select class="view_tute" name="tnamecoocie" id="tnamecoocie">
+                                <option value=""> Choose tute </option>
+                                <?php
+                                // tutes li
+                                $li_tute = "SELECT * FROM `tutes` WHERE `Action` = 1 AND `Start_date` <= '{$today_date}'";
+                                $li_tute_result = mysqli_query($connection, $li_tute);
+
+                                if (mysqli_num_rows($li_tute_result) > 0) {
+                                    while ($tute_li = mysqli_fetch_assoc($li_tute_result)) {
+                                        $id = $tute_li['ID'];
+                                        $Tute_name = $tute_li['Tute_name'];
+                                        $Delivered = $tute_li['Delivered'];
+                                        $t_class = $tute_li['Class'];
+
+                                        echo "<option value='{$id}'> {$t_class} | {$Tute_name} </option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </p>
+                        <br>
                         <p>
                             <input type="submit" id="start_attendance" name="start_attendance" value="START ATTENDANCE">
                         </p>
                     </form>
+
                     <form action="clear-cookies.php" method="get" style="display: <?= $display2; ?>;">
                         <p>
                             <label> Class : </label>
@@ -272,6 +442,7 @@ if (isset($_COOKIE['cookieClass'])) {
                         </p>
                     </form>
                 </div>
+
                 <div class="students" style="display: <?= $display2; ?>;">
                     <div class="search">
                         <form method="post">
@@ -338,46 +509,32 @@ if (isset($_COOKIE['cookieClass'])) {
                             <!-- update attendance  -->
                             <div class="updates">
                                 <form method="post" <?= $recode_display ?>>
-                                    <p style="background-color: var(--primary-light); padding: 10px; box-sizing: border-box; border-radius: 5px;">
-                                        <input type="checkbox" id="present" required style="cursor: pointer;">
-                                        <label for="present" style="cursor: pointer;"> : Present </label>
-                                    </p>
                                     <br>
-                                    <p>
-                                        <label for="fees"> Fees :</label>
-                                        <select name="fees" id="fees">
-                                            <option value=""> Select month for charges </option>
-                                            <option value="<?= date("Y") . " " . "January" ?>"> January </option>
-                                            <option value="<?= date("Y") . " " . "February" ?>"> February </option>
-                                            <option value="<?= date("Y") . " " . "March" ?>"> March </option>
-                                            <option value="<?= date("Y") . " " . "April" ?>"> April </option>
-                                            <option value="<?= date("Y") . " " . "May" ?>"> May </option>
-                                            <option value="<?= date("Y") . " " . "June" ?>"> June </option>
-                                            <option value="<?= date("Y") . " " . "July" ?>"> July </option>
-                                            <option value="<?= date("Y") . " " . "August" ?>"> August </option>
-                                            <option value="<?= date("Y") . " " . "September" ?>"> September </option>
-                                            <option value="<?= date("Y") . " " . "October" ?>"> October </option>
-                                            <option value="<?= date("Y") . " " . "November" ?>"> November </option>
-                                            <option value="<?= date("Y") . " " . "December" ?>"> December </option>
-                                        </select>
-                                    </p>
-                                    <br>
+                                    <label for="fees"> Fees :</label>
+                                    <br><br>
+                                    <div class="fees_month">
+                                        <p>
+                                            <input type="checkbox" name="fees_last" id="fees_last" value=" <?= $last_year . " " . $last_month_name ?> ">
+                                            <label for="fees_last"> : <?= $last_month_name; ?> </label>
+                                        </p>
+                                        <p>
+                                            <input type="checkbox" name="fees_this" id="fees_this" value=" <?= $this_year . " " . $this_month_name ?> ">
+                                            <label for="fees_this"> : <?= $this_month_name; ?> </label>
+                                        </p>
+                                        <p>
+                                            <input type="checkbox" name="fees_next" id="fees_next" value=" <?= $next_year . " " . $next_month_name ?> ">
+                                            <label for="fees_next"> : <?= $next_month_name; ?> </label>
+                                        </p>
+                                    </div>
                                     <p style="<?= $tute; ?>">
                                         <label for="tname"> Tute :</label>
-                                        <select name="tname" id="tname">
-                                            <option value=""> Choose tute </option>
-                                            <?php
-                                            if (mysqli_num_rows($li_tute_result) > 0) {
-                                                while ($tute_li = mysqli_fetch_assoc($li_tute_result)) {
-                                                    $id = $tute_li['ID'];
-                                                    $Tute_name = $tute_li['Tute_name'];
-                                                    $Delivered = $tute_li['Delivered'];
-
-                                                    echo "<option value='{$id}'> {$Tute_name} </option>";
-                                                }
-                                            }
-                                            ?>
-                                        </select>
+                                        <input type="text" value="<?= $tute_name_is; ?>" readonly>
+                                        <input type="text" value="<?= $_COOKIE['cookieTuteName']; ?>" name="tname" readonly hidden>
+                                    </p>
+                                    <br>
+                                    <p style="display: <?= $display_input; ?>;">
+                                        <input type="radio" name="tname" id="befor_tute" value="<?= $last_tute_ID ?>">
+                                        <label for="befor_tute" style="cursor: pointer;"> : <?= $ttt_name; ?> </label>
                                     </p>
                                     <br>
                                     <p>
@@ -415,9 +572,9 @@ if (isset($_COOKIE['cookieClass'])) {
         </section>
     </div>
 
+    <script src="assect/js/secu.js"></script>
     <script src="assect/js/jquery.min.js"></script>
     <script src="assect/js/main.js"></script>
-    <script src="assect/js/secu.js"></script>
 </body>
 
 </html>

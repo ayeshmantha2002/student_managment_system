@@ -4,6 +4,7 @@ setcookie('cookieClass', NULL, -time() + 60 * 60 * 12);
 setcookie('cookieLocation', NULL, -time() + 60 * 60 * 12);
 setcookie('cookieType', NULL, -time() + 60 * 60 * 12);
 setcookie('cookieTute', NULL, -time() + 60 * 60 * 12);
+setcookie('cookieTuteName', NULL, -time() + 60 * 60 * 12);
 
 ?>
 

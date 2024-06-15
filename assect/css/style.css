@@ -197,7 +197,7 @@ hr {
 .indicators {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-gap: 20px;
   padding: 20px 0;
   box-sizing: border-box;
@@ -815,6 +815,10 @@ table .paid {
   width: auto;
 }
 
+.updates form input[type="radio"] {
+  width: 20px;
+}
+
 .updates form select {
   width: 100%;
   padding: 10px;
@@ -985,6 +989,10 @@ table .paid {
   box-shadow: 0 0 20px var(--shadow);
 }
 
+input[type="radio"] {
+  width: 20px;
+}
+
 button {
   background-color: tomato;
   padding: 10px;
@@ -1002,4 +1010,16 @@ button:hover {
   background-color: red;
   box-shadow: 0 0 10px var(--shadow);
   scale: 108%;
+}
+
+.view_tute {
+  display: none;
+}
+
+.fees_month {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }

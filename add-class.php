@@ -211,6 +211,10 @@ if (isset($_GET['remove_new_class'])) {
                         <p> <a href="#" id="view_more"> VIEW MORE </a> </p>
                     </div>
                 </div>
+                <div class="box">
+                    <h2> Monthly Report </h2>
+                    <hr>
+                </div>
             </div>
 
             <!-- add year form  -->

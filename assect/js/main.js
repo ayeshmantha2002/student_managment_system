@@ -15,6 +15,17 @@ $(document).ready(function () {
     }
   });
 
+  var tute = true;
+  $("#enable_tutes").click(function () {
+    if (tute == true) {
+      $(".view_tute").css("display", "block");
+      tute = false;
+    } else {
+      $(".view_tute").css("display", "none");
+      tute = true;
+    }
+  });
+
   $("#add_year").click(function () {
     $(".add_class_page").css("z-index", "1");
     $(".add_class_page").css("opacity", "1");
