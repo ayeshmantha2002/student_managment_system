@@ -77,9 +77,17 @@ $class_list_result = mysqli_query($connection, $class_list);
 $location_form = "SELECT `Location` FROM `location`";
 $location_form_result = mysqli_query($connection, $location_form);
 
+// Location list2 
+$location_form_monthly = "SELECT * FROM `location`";
+$location_form_monthly_result = mysqli_query($connection, $location_form_monthly);
+
 // class list main
 $list_class = "SELECT * FROM `class` ORDER BY `Year` DESC LIMIT 3";
 $list_class_result = mysqli_query($connection, $list_class);
+
+// class list select
+$list_class_select = "SELECT * FROM `class` ORDER BY `Year` DESC LIMIT 3";
+$list_class_select_result = mysqli_query($connection, $list_class_select);
 
 // class list set classes
 $list_class_set = "SELECT `Year` FROM `class` ORDER BY `Year`";
@@ -148,13 +156,14 @@ if (isset($_GET['remove_new_class'])) {
                 <div class="box">
                     <h2> YEAR </h2>
                     <hr>
+                    <!-- Year Removal -->
                     <?php
                     if (mysqli_num_rows($list_class_result) > 0) {
                         while ($list_Year = mysqli_fetch_assoc($list_class_result)) {
                             echo "
                             <div class='cl_list'>
                                 <h2> {$list_Year['Year']} </h2>
-                                <a href='add-class.php?remove_class={$list_Year['ID']}'> REMOVE </a>
+                                <a href='add-class.php?remove_class={$list_Year['ID']}'     onclick='return confirmRemoval();'> REMOVE </a>
                             </div>
                             ";
                         }
@@ -170,6 +179,7 @@ if (isset($_GET['remove_new_class'])) {
                 <div class="box">
                     <h2> CLASS DATES </h2>
                     <hr>
+                    <!-- Class Date Removal -->
                     <?php
                     if (mysqli_num_rows($set_classes_result) > 0) {
                         while ($new_class = mysqli_fetch_assoc($set_classes_result)) {
@@ -178,9 +188,9 @@ if (isset($_GET['remove_new_class'])) {
                                 <p> {$new_class['Date']} </p>
                                 <p> {$new_class['Location']} </p>
                                 <p> {$new_class['Class']} / {$new_class['Type']} </p>
-                                <a href='add-class.php?remove_new_class={$new_class['ID']}'> REMOVE </a>
+                                <a href='add-class.php?remove_new_class={$new_class['ID']}' onclick='return confirmRemoval();'> REMOVE </a>
                             </div>
-                            ";
+                        ";
                         }
                     }
                     ?>
@@ -214,6 +224,66 @@ if (isset($_GET['remove_new_class'])) {
                 <div class="box">
                     <h2> Monthly Report </h2>
                     <hr>
+                    <form action="monthy-report.php" method="post">
+                        <p>
+                            <label for="date_class"> Class </label>
+                            <select name="date_class" id="date_class" required>
+                                <?php
+                                if (mysqli_num_rows($list_class_select_result) > 0) {
+                                    while ($fetchClass = mysqli_fetch_assoc($list_class_select_result)) {
+                                        echo "<option value='{$fetchClass['Year']}'> {$fetchClass['Year']} </option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="class_type"> Class type </label>
+                            <select name="class_type" id="class_type" required>
+                                <option value="T"> Theory </option>
+                                <option value="R"> Revition </option>
+                                <option value="P"> Paper </option>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="class_location"> Class Location </label>
+                            <select name="class_location" id="class_location" required>
+                                <?php
+                                if (mysqli_num_rows($location_form_monthly_result) > 0) {
+                                    while ($fetchLocation = mysqli_fetch_assoc($location_form_monthly_result)) {
+                                        echo "<option value='{$fetchLocation['UID']}'> {$fetchLocation['location']} </option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="month_date"> Chooce Month </label>
+                            <select name="yr" id="yr">
+                                <option value="<?= date("Y"); ?>"> <?= date("Y"); ?> </option>
+                                <option value="<?= date("Y") - 1; ?>"> <?= date("Y") - 1; ?> </option>
+                            </select>
+                            <select name="month_date" id="month_date" required>
+                                <option value="">Chooce Month</option>
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </p>
+                        <br>
+                        <p>
+                            <input type="submit" value="Submit" name="monthly_submit">
+                        </p>
+                    </form>
                 </div>
             </div>
 
@@ -316,6 +386,12 @@ if (isset($_GET['remove_new_class'])) {
             </section>
         </section>
     </div>
+
+    <script>
+        function confirmRemoval() {
+            return confirm("Are you sure you want to remove this item?");
+        }
+    </script>
 
     <script src="assect/js/secu.js"></script>
     <script src="assect/js/jquery.min.js"></script>

@@ -215,7 +215,7 @@ if (isset($_GET['edit_tute_id'])) {
                             </p>
                             <br>
                             <p>
-                                <input type="submit" name="add_tutes" value="Add Student">
+                                <input type="submit" name="add_tutes" value="Add Tute">
                             </p>
                         </form>
                     </div>

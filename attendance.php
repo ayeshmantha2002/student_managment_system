@@ -113,15 +113,17 @@ if (isset($_GET['start_attendance'])) {
         setcookie('cookieClass', $cookieClass, time() + 60 * 60 * 12);
         setcookie('cookieLocation', $cookieLocation, time() + 60 * 60 * 12);
         setcookie('cookieType', $cookieType, time() + 60 * 60 * 12);
-        if (isset($_GET['tnamecoocie']) && !empty($_GET['tnamecoocie'])) {
-            setcookie('cookieTuteName', $_GET['tnamecoocie'], time() + 60 * 60 * 12);
-        }
+        // if (isset($_GET['tnamecoocie']) && !empty($_GET['tnamecoocie'])) {
+        //     setcookie('cookieTuteName', $_GET['tnamecoocie'], time() + 60 * 60 * 12);
+        // }
 
         if (isset($_GET['enable_tutes'])) {
             if ($_GET['enable_tutes'] == 'true') {
                 setcookie('cookieTute', 'true', time() + 60 * 60 * 12);
+                setcookie('cookieTuteName', $_GET['tnamecoocie'], time() + 60 * 60 * 12);
             } else {
                 setcookie('cookieTute', NULL, -time() + 60 * 60 * 12);
+                setcookie('cookieTuteName', NULL, -time() + 60 * 60 * 12);
             }
         }
         header("location: attendance_start.php?start");
@@ -209,6 +211,7 @@ if (isset($_COOKIE['cookieClass'])) {
             $student_ID = $student_details['Student_ID'];
             $student_fname = $student_details['First_name'];
             $student_lname = $student_details['Last_name'];
+            $student_Card = $student_details['Card'];
             $student_pnumber = $student_details['Phone_number'];
 
             $full_name = $student_fname . " " . $student_lname;
@@ -322,6 +325,7 @@ if (isset($_COOKIE['cookieClass'])) {
             }
         }
     }
+
     // last tute details fetch
     $last_tute = "SELECT * FROM `deliverd_tute` WHERE `Class` = '{$_COOKIE['cookieClass']}' AND `Date` != '{$today_date}' ORDER BY `Tute_ID` DESC LIMIT 1";
     $last_tute_result = mysqli_query($connection, $last_tute);
@@ -332,19 +336,22 @@ if (isset($_COOKIE['cookieClass'])) {
         $ttt = "SELECT `Tute_name` FROM `tutes` WHERE `ID` = {$last_tute_ID}";
         $ttt_result = mysqli_query($connection, $ttt);
 
-        if (mysqli_num_rows($ttt_result) > 0) {
+        // check tute
+        $check_tute_user = "SELECT * FROM `deliverd_tute` WHERE `Student_ID` = '{$class_code}{$st_id}' AND `Tute_ID` = {$last_tute_ID}";
+        $check_tute_user_result = mysqli_query($connection, $check_tute_user);
+        if (mysqli_num_rows($check_tute_user_result) == 1) {
+            $display_input = "none";
+        } else {
+            $display_input = "block";
+        }
+
+        if (mysqli_num_rows($ttt_result) == 1) {
             $ttt_fetch = mysqli_fetch_assoc($ttt_result);
             $ttt_name = $ttt_fetch['Tute_name'];
         }
-    }
-
-    // check tute
-    $check_tute_user = "SELECT * FROM `deliverd_tute` WHERE `Student_ID` = '{$class_code}{$st_id}' AND `Tute_ID` = {$last_tute_ID}";
-    $check_tute_user_result = mysqli_query($connection, $check_tute_user);
-    if (mysqli_num_rows($check_tute_user_result) > 0) {
-        $display_input = "none";
     } else {
-        $display_input = "block";
+        $last_tute_ID = 0;
+        $display_input = "none";
     }
 } else {
     // last 3 month fees 
@@ -476,10 +483,12 @@ if (isset($_COOKIE['cookieClass'])) {
                                 <img src="assect/img/imgs/student.png" alt="user">
                             </div>
                             <div class="st_details">
-                                <p> <span> Student ID :</span> <?= $student_ID; ?> </p>
-                                <p> <span> Student Name :</span> <?= $student_fname . " " . $student_lname; ?> </p>
-                                <p> <span> Student Class :</span> <?= $_COOKIE['cookieClass'] ?> </p>
-                                <p> <span> Student Tel :</span> <?= $student_pnumber; ?> </p>
+                                <h2> Student ID : <?= $student_ID; ?> </h2>
+                                <h2> Student Name : <?= $student_fname . " " . $student_lname; ?> </h2>
+                                <h2> Student Class : <?= $_COOKIE['cookieClass'] ?> </h2>
+                                <h2> Student Tel : <?= $student_pnumber; ?> </h2>
+                                <br>
+                                <h2> <span style="color: var(--primary);"> <?= $student_Card; ?> Card </span></h2>
                             </div>
                         </div>
                         <br>

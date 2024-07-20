@@ -366,7 +366,14 @@ hr {
   text-align: left;
 }
 
-.form form input {
+.double {
+  display: flex;
+  gap: 10px;
+}
+
+.form form input,
+.box form input,
+.box form p select {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -376,6 +383,7 @@ hr {
   background-color: var(--primary-light);
 }
 
+.box form input[type="submit"],
 .form form input[type="submit"] {
   background-color: var(--primary);
   color: var(--ligt-text);
@@ -389,6 +397,7 @@ hr {
   cursor: pointer;
 }
 
+.box form input[type="submit"]:hover,
 .form form input[type="submit"]:hover {
   background-color: var(--primary_hover);
   box-shadow: 0 0 20px var(--shadow);
