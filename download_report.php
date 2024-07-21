@@ -47,6 +47,7 @@ if (isset($_POST['monthly_submit'])) {
         foreach ($data as $date) {
             echo $date . "<br>";
         }
+        echo "<br>";
     }
     echo "      </div>
             </td>

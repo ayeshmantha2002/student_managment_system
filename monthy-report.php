@@ -23,6 +23,13 @@ if (isset($_COOKIE['ID'])) {
         echo '<link rel="stylesheet" href="assect/css/dark.css">';
     }
     ?>
+    <style>
+        .low-attendance {
+            background-color: #ffcccc;
+            /* Light red background */
+        }
+    </style>
+
 </head>
 
 <body>
@@ -68,7 +75,7 @@ if (isset($_COOKIE['ID'])) {
                                 $student_query = "SELECT * FROM `student` WHERE `Class` = '$date_class' AND `Student_ID` LIKE '%$class_location%'";
                                 $student_result = mysqli_query($connection, $student_query);
 
-                                $date_list = "SELECT DISTINCT `Date` FROM `attendance` WHERE `Class` = '$date_class' AND `Date` LIKE '%$month%'";
+                                $date_list = "SELECT DISTINCT `Date` FROM `attendance` WHERE `Class` = '$date_class' AND `Type` = '{$class_type}' AND `Date` LIKE '%$month%'";
                                 $date_list_result = mysqli_query($connection, $date_list);
 
                                 if ($date_list_result->num_rows > 0) {
@@ -139,7 +146,10 @@ if (isset($_COOKIE['ID'])) {
 
                                         $paid = (mysqli_num_rows($fees_result) > 0) ? "Paid" : "-";
 
-                                        echo "<tr>
+                                        $row_class = $annual_attendance_percentage < 80 ? 'low-attendance' : '';
+                                        $row_class .= $paid === "-" ? ' low-fees' : '';
+
+                                        echo "<tr class='$row_class'>
                                             <td>" . $students_list['Student_ID'] . "</td>
                                             <td>" . $students_list['First_name'] . " " . $students_list['Last_name'] . "</td>
                                             <td style='font-weight: bold;'>" . trim($attendance_data) . "</td>

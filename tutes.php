@@ -22,8 +22,7 @@ $classes_result = mysqli_query($connection, $classes);
 $classes_select = "SELECT * FROM `class`";
 $classes_select_result = mysqli_query($connection, $classes_select);
 
-
-// inser tutes 
+// insert tutes 
 if (isset($_POST['add_tutes'])) {
     $tname = ucfirst(mysqli_real_escape_string($connection, $_POST['tname']));
     $num_tutes = mysqli_real_escape_string($connection, $_POST['num_tutes']);
@@ -33,7 +32,7 @@ if (isset($_POST['add_tutes'])) {
     $check_tutes = "SELECT * FROM `tutes` WHERE `Tute_name` = '{$tname}' AND `Class` = '{$year}'";
     $check_tutes_result = mysqli_query($connection, $check_tutes);
     if (mysqli_num_rows($check_tutes_result) > 0) {
-        $errors[] = "This tute is already exists.";
+        $errors[] = "This tute already exists.";
     } else {
         $insert_tute = "INSERT INTO `tutes` (`Tute_name`, `Class`, `Start_date`, `Counte`, `Delivered`, `Action`) VALUES ('{$tname}', '{$year}', '{$date}', {$num_tutes}, 0, 1)";
         $insert_tute_result = mysqli_query($connection, $insert_tute);
@@ -101,7 +100,7 @@ if (isset($_GET['edit_tute_id'])) {
         }
     }
 
-    // cosed 
+    // closed 
     if (isset($_POST['closed'])) {
         $closed = "UPDATE `tutes` SET `Action` = 0 WHERE `ID` = {$tute_id}";
         $closed_result = mysqli_query($connection, $closed);
@@ -121,7 +120,6 @@ if (isset($_GET['edit_tute_id'])) {
 } else {
     $display = "none";
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -196,9 +194,9 @@ if (isset($_GET['edit_tute_id'])) {
                             </p>
                             <br>
                             <p>
-                                <label for="year"> Chooce Year : </label>
+                                <label for="year"> Choose Year : </label>
                                 <select name="year" required>
-                                    <option value=""> Chooce Year </option>
+                                    <option value=""> Choose Year </option>
                                     <?php
                                     if (mysqli_num_rows($classes_select_result) > 0) {
                                         while ($classes_select_fetch = mysqli_fetch_assoc($classes_select_result)) {
@@ -260,7 +258,7 @@ if (isset($_GET['edit_tute_id'])) {
 
                                     <td> <a href='tutes.php?edit_tute_id={$tutes_details['ID']}'>Edit</a> </td>
                                     
-                                    <td> <span class='delete'> <a href='tutes.php?delete_tute_id={$tutes_details['ID']}'>Delete</a> </ span> </td>
+                                    <td> <span class='delete'> <a href='tutes.php?delete_tute_id={$tutes_details['ID']}' onclick='return confirmDelete()'>Delete</a> </ span> </td>
                                 </tr>
                                 ";
                             }
@@ -314,6 +312,11 @@ if (isset($_GET['edit_tute_id'])) {
     <script src="assect/js/jquery.min.js"></script>
     <script src="assect/js/secu.js"></script>
     <script src="assect/js/main.js"></script>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this tute?");
+        }
+    </script>
 </body>
 
 </html>
