@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
             <div class="details">
                 <img src="assect/img/imgs/logosq.png" alt="logo">
                 <br><br>
-                <h1> Mr.ChemistrY </h1>
+                <h1> Mr.Maths </h1>
                 <p> STUDENT MANAGMENT SYSTEM </p>
             </div>
             <div class="form">

@@ -26,6 +26,29 @@ if (isset($_POST['monthly_submit'])) {
     $month_date = mysqli_real_escape_string($connection, $_POST['month_date']);
     $month = $yr . "-" . $month_date;
 
+    $months = [
+        "01" => "January",
+        "02" => "February",
+        "03" => "March",
+        "04" => "April",
+        "05" => "May",
+        "06" => "June",
+        "07" => "July",
+        "08" => "August",
+        "09" => "September",
+        "10" => "October",
+        "11" => "November",
+        "12" => "December"
+    ];
+
+    if (array_key_exists($month_date, $months)) {
+        $filter_month = $months[$month_date];
+    } else {
+        $filter_month = "Invalid Month";
+    }
+
+    $month_fees = $yr . " " . $filter_month;
+
     $student_query = "SELECT * FROM `student` WHERE `Class` = '$date_class' AND `Student_ID` LIKE '%$class_location%'";
     $student_result = mysqli_query($connection, $student_query);
 
@@ -39,6 +62,11 @@ if (isset($_POST['monthly_submit'])) {
     }
 
     echo "<table border='1'>
+        <tr>
+            <th colspan='6'>
+                <h1 style='font-size: 18px; margin: 0; padding: 10px 0;'> $month_fees </h1>
+            </th>
+        </tr>
         <tr>
             <td colspan='6'>
                 <h1 style='font-size: 16px; margin: 0; padding: 5px 0;'>The days of classes:</h1>
@@ -129,6 +157,29 @@ if (isset($_POST['monthly_submit'])) {
                 </tr>";
         }
     }
+
+    // Add card details section
+    $full_card_query = "SELECT COUNT(*) as full_card_count FROM `class_fees` WHERE `ST_name` = 'full' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
+    $half_card_query = "SELECT COUNT(*) as half_card_count FROM `class_fees` WHERE `ST_name` = 'half' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
+    $free_card_query = "SELECT COUNT(*) as free_card_count FROM `class_fees` WHERE `ST_name` = 'free' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
+
+
+    $full_card_result = mysqli_query($connection, $full_card_query);
+    $half_card_result = mysqli_query($connection, $half_card_query);
+    $free_card_result = mysqli_query($connection, $free_card_query);
+
+    $full_card_count = mysqli_fetch_assoc($full_card_result)['full_card_count'];
+    $half_card_count = mysqli_fetch_assoc($half_card_result)['half_card_count'];
+    $free_card_count = mysqli_fetch_assoc($free_card_result)['free_card_count'];
+
+    echo "<tr>
+            <td colspan='6'>
+                <h3 style='text-align: center;'>Card Details:</h3>
+                <h4>Full Cards: $full_card_count</h4>
+                <h4>Half Cards: $half_card_count</h4>
+                <h4>Free Cards: $free_card_count</h4>
+            </td>
+        </tr>";
 
     echo "</table>";
 }

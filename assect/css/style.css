@@ -1,12 +1,14 @@
 :root {
-  /* --primary: #695cfe;
+  /* --primary: #00a088;
+  --primary_hover: #00e7c4;
+  --primary: #695cfe;
   --primary_hover: #4c43b8; */
 
   /* ######## colors ######## */
   --body-color: #efe9f7;
   --light-box: #fff;
-  --primary: #00a088;
-  --primary_hover: #00e7c4;
+  --primary: #004fe1;
+  --primary_hover: #08a1f7;
   --primary-light: #f6f5ff;
   --toggle: #ddd;
   --text: #707070;

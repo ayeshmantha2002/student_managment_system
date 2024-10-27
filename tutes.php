@@ -43,14 +43,14 @@ if (isset($_POST['add_tutes'])) {
 }
 
 // delete tutes
-if (isset($_GET['delete_tute_id'])) {
-    $delete_id = mysqli_real_escape_string($connection, $_GET['delete_tute_id']);
-    $delete_tute = "DELETE FROM `tutes` WHERE `ID` = {$delete_id}";
-    $delete_tute_result = mysqli_query($connection, $delete_tute);
-    if ($delete_tute_result) {
-        header("location: tutes.php");
-    }
-}
+// if (isset($_GET['delete_tute_id'])) {
+//     $delete_id = mysqli_real_escape_string($connection, $_GET['delete_tute_id']);
+//     $delete_tute = "DELETE FROM `tutes` WHERE `ID` = {$delete_id}";
+//     $delete_tute_result = mysqli_query($connection, $delete_tute);
+//     if ($delete_tute_result) {
+//         header("location: tutes.php");
+//     }
+// }
 
 // list students 
 if (isset($_GET['filter_class'])) {
@@ -257,8 +257,6 @@ if (isset($_GET['edit_tute_id'])) {
                                     <td> <span class='view'> <a href='view-tute.php?tute_id={$tutes_details['ID']}'>VIEW</a> </span> </td>
 
                                     <td> <a href='tutes.php?edit_tute_id={$tutes_details['ID']}'>Edit</a> </td>
-                                    
-                                    <td> <span class='delete'> <a href='tutes.php?delete_tute_id={$tutes_details['ID']}' onclick='return confirmDelete()'>Delete</a> </ span> </td>
                                 </tr>
                                 ";
                             }

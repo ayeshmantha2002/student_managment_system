@@ -11,6 +11,7 @@ $fname = "";
 $Lname = "";
 $year = "";
 $pnumber = "";
+$id_number = "";
 $today = date("Y-m-d");
 
 $errors = array();
@@ -27,6 +28,7 @@ if (isset($_POST['add_student'])) {
     $year = mysqli_real_escape_string($connection, $_POST['year']);
     $fees = mysqli_real_escape_string($connection, $_POST['fees']);
     $pnumber = mysqli_real_escape_string($connection, $_POST['pnumber']);
+    $id_number = mysqli_real_escape_string($connection, $_POST['id_number']);
 
     $check_student = "SELECT * FROM `student` WHERE `Student_ID` = '{$st_id}' AND `Class` = '{$year}'";
     $check_student_result = mysqli_query($connection, $check_student);
@@ -34,7 +36,7 @@ if (isset($_POST['add_student'])) {
     if (mysqli_num_rows($check_student_result) > 0) {
         $errors[] = " This student ID already exists ";
     } else {
-        $insert_student = "INSERT INTO `student` (`Student_ID`, `First_name`, `Last_name`, `Class`, `Card`, `Phone_number`, `Register_date`, `Status`) VALUES ('{$st_id}', '{$fname}', '{$Lname}', '{$year}', '{$fees}', '{$pnumber}', '{$today}', 1)";
+        $insert_student = "INSERT INTO `student` (`Student_ID`, `First_name`, `Last_name`, `Class`, `Card`, `Phone_number`, `ID_number`, `Register_date`, `Status`) VALUES ('{$st_id}', '{$fname}', '{$Lname}', '{$year}', '{$fees}', '{$pnumber}', '{$id_number}', '{$today}', 1)";
         $insert_student_result = mysqli_query($connection, $insert_student);
         if ($insert_student_result) {
             header("location: user-list.php");
@@ -48,6 +50,7 @@ $old_St_fname = "";
 $old_St_lname = "";
 $old_St_class = "";
 $old_St_phone_number = "";
+$old_St_id_number = "";
 if (isset($_GET['edit_student_id'])) {
     $edit_st_id = mysqli_real_escape_string($connection, $_GET['edit_student_id']);
     $up_student = "SELECT * FROM `student` WHERE `ID` = {$edit_st_id}";
@@ -60,6 +63,7 @@ if (isset($_GET['edit_student_id'])) {
         $old_St_class = $old_st_details['Class'];
         $old_St_Card = $old_st_details['Card'];
         $old_St_phone_number = $old_st_details['Phone_number'];
+        $old_St_id_number = $old_st_details['ID_number'];
     }
 
     if (isset($_POST['up_submit'])) {
@@ -69,8 +73,9 @@ if (isset($_GET['edit_student_id'])) {
         $up_class = mysqli_real_escape_string($connection, $_POST['up_class']);
         $up_card = ucfirst(mysqli_real_escape_string($connection, $_POST['up_card']));
         $up_pnumber = mysqli_real_escape_string($connection, $_POST['up_pnumber']);
+        $up_idnumber = mysqli_real_escape_string($connection, $_POST['up_idnumber']);
 
-        $update_st = "UPDATE `student` SET `Student_ID` = '{$up_stID}', `First_name` = '{$up_first}', `Last_name` = '{$up_last}', `Class` = '{$up_class}', `Card` = '{$up_card}', `Phone_number` = '{$up_pnumber}' WHERE `ID` = {$edit_st_id}";
+        $update_st = "UPDATE `student` SET `Student_ID` = '{$up_stID}', `First_name` = '{$up_first}', `Last_name` = '{$up_last}', `Class` = '{$up_class}', `Card` = '{$up_card}', `Phone_number` = '{$up_pnumber}', `ID_number` = '{$up_idnumber}' WHERE `ID` = {$edit_st_id}";
         $update_st_result = mysqli_query($connection, $update_st);
 
         if ($update_st_result) {
@@ -212,14 +217,35 @@ if (isset($_GET['remove_student_id'])) {
                                 <label for="st_id"> Student ID : </label>
                                 <input type="text" name="st_id" id="st_id" placeholder="Student ID" value="<?php
                                                                                                             if (isset($_COOKIE['st_id'])) {
-                                                                                                                $numberPart = (int) filter_var($_COOKIE['st_id'], FILTER_SANITIZE_NUMBER_INT);
-                                                                                                                $numberPart++;
-                                                                                                                $newValue = 'BW' . str_pad($numberPart, 3, '0', STR_PAD_LEFT);
-                                                                                                                echo $newValue;
+                                                                                                                // Get the current student ID from the cookie
+                                                                                                                $currentId = $_COOKIE['st_id'];
+
+                                                                                                                // Use a regular expression to separate the letters and numbers
+                                                                                                                preg_match('/^([a-zA-Z]+)(\d+)$/', $currentId, $matches);
+
+                                                                                                                // Ensure both parts exist before proceeding
+                                                                                                                if (isset($matches[1]) && isset($matches[2])) {
+                                                                                                                    $letterPart = $matches[1]; // The letters (e.g., BW)
+                                                                                                                    $numberPart = (int) $matches[2]; // The numbers
+
+                                                                                                                    // Increment the numeric part
+                                                                                                                    $numberPart++;
+
+                                                                                                                    // Combine the letter part with the incremented number
+                                                                                                                    $newValue = $letterPart . str_pad($numberPart, 3, '0', STR_PAD_LEFT);
+
+                                                                                                                    // Output the new value
+                                                                                                                    echo $newValue;
+                                                                                                                } else {
+                                                                                                                    // In case the pattern doesn't match, just display the cookie value
+                                                                                                                    echo $currentId;
+                                                                                                                }
                                                                                                             } else {
+                                                                                                                // If the cookie isn't set, display a default or previous value (if available)
                                                                                                                 echo $st_id;
                                                                                                             }
                                                                                                             ?>" required>
+
                             </p>
                             <br>
                             <div class="double">
@@ -233,36 +259,42 @@ if (isset($_GET['remove_student_id'])) {
                                 </p>
                             </div>
                             <br>
-                            <p>
-                                <label for="fees"> Fees : </label>
-                                <select name="fees" id="fees">
-                                    <option value="Full"> Full Card </option>
-                                    <option value="Half"> Half Card </option>
-                                    <option value="Free"> Free Card </option>
-                                </select>
-                            </p>
-                            <br>
-                            <p>
-                                <label for="year"> Chooce Year : </label>
-                                <select name="year" required>
-                                    <option value="<?php echo $year; ?>"> Chooce Year </option>
-                                    <?php
-                                    // classes
-                                    $classes = "SELECT * FROM `class`";
-                                    $classes_result = mysqli_query($connection, $classes);
+                            <div class="double">
+                                <p>
+                                    <label for="fees"> Fees : </label>
+                                    <select name="fees" id="fees">
+                                        <option value="Full"> Full Card </option>
+                                        <option value="Half"> Half Card </option>
+                                        <option value="Free"> Free Card </option>
+                                    </select>
+                                </p>
+                                <p>
+                                    <label for="year"> Chooce Year : </label>
+                                    <select name="year" required>
+                                        <option value="<?php echo $year; ?>"> Chooce Year </option>
+                                        <?php
+                                        // classes
+                                        $classes = "SELECT * FROM `class`";
+                                        $classes_result = mysqli_query($connection, $classes);
 
-                                    if (mysqli_num_rows($classes_result) > 0) {
-                                        while ($class_fetch = mysqli_fetch_assoc($classes_result)) {
-                                            echo " <option value='{$class_fetch['Year']}'> {$class_fetch['Year']} </option> ";
+                                        if (mysqli_num_rows($classes_result) > 0) {
+                                            while ($class_fetch = mysqli_fetch_assoc($classes_result)) {
+                                                echo " <option value='{$class_fetch['Year']}'> {$class_fetch['Year']} </option> ";
+                                            }
                                         }
-                                    }
-                                    ?>
-                                </select>
-                            </p>
+                                        ?>
+                                    </select>
+                                </p>
+                            </div>
                             <br>
                             <p>
                                 <label for="pnumber"> Phone number : </label>
                                 <input type="number" name="pnumber" id="pnumber" placeholder="Phone Number" value="<?php echo $pnumber; ?>">
+                            </p>
+                            <br>
+                            <p>
+                                <label for="id_number"> ID number : </label>
+                                <input type="number" name="id_number" id="id_number" placeholder="ID Number" value="<?php echo $id_number; ?>">
                             </p>
                             <br>
                             <p>
@@ -308,7 +340,7 @@ if (isset($_GET['remove_student_id'])) {
 
             <section class="update_students" style="z-index: 1; opacity: 1; display: <?= $edit_form; ?>;">
                 <form method="post" enctype="multipart/form-data">
-                    <p class="close_btn"><img src="assect/img/icons/x-circle-solid-24.png" alt="close"></p>
+                    <p class="close_btn"><a href="user-list.php"><img src="assect/img/icons/x-circle-solid-24.png" alt="close"></a></p>
                     <h2> Update details </h2>
                     <br>
                     <p>
@@ -340,6 +372,11 @@ if (isset($_GET['remove_student_id'])) {
                     <p>
                         <label for="up_pnumber"> Phone Number :</label>
                         <input type="text" name="up_pnumber" id="up_pnumber" value="<?= $old_St_phone_number; ?>" placeholder="Phone Number">
+                    </p>
+                    <br>
+                    <p>
+                        <label for="up_idnumber"> ID Number :</label>
+                        <input type="text" name="up_idnumber" id="up_idnumber" value="<?= $old_St_id_number; ?>" placeholder="ID Number">
                     </p>
                     <br>
                     <p>

@@ -122,8 +122,8 @@ if (isset($_GET['start_attendance'])) {
                 setcookie('cookieTute', 'true', time() + 60 * 60 * 12);
                 setcookie('cookieTuteName', $_GET['tnamecoocie'], time() + 60 * 60 * 12);
             } else {
-                setcookie('cookieTute', NULL, -time() + 60 * 60 * 12);
-                setcookie('cookieTuteName', NULL, -time() + 60 * 60 * 12);
+                setcookie('cookieTute', '', -time() + 60 * 60 * 12);
+                setcookie('cookieTuteName', '', -time() + 60 * 60 * 12);
             }
         }
         header("location: attendance_start.php?start");
@@ -151,11 +151,11 @@ if (isset($_COOKIE['cookieTute'])) {
 
 // clear cookies 
 if (isset($_GET['clear'])) {
-    setcookie('cookieClass', NULL, -time() + 60 * 60 * 12);
-    setcookie('cookieLocation', NULL, -time() + 60 * 60 * 12);
-    setcookie('cookieType', NULL, -time() + 60 * 60 * 12);
-    setcookie('cookieTute', NULL, -time() + 60 * 60 * 12);
-    setcookie('cookieTuteName', NULL, -time() + 60 * 60 * 12);
+    setcookie('cookieClass', '', -time() + 60 * 60 * 12);
+    setcookie('cookieLocation', '', -time() + 60 * 60 * 12);
+    setcookie('cookieType', '', -time() + 60 * 60 * 12);
+    setcookie('cookieTute', '', -time() + 60 * 60 * 12);
+    setcookie('cookieTuteName', '', -time() + 60 * 60 * 12);
 }
 
 
@@ -220,6 +220,7 @@ if (isset($_COOKIE['cookieClass'])) {
             setcookie('ST_ID', $ST_ID, time() + 60 * 60);
             setcookie('student_ID', $student_ID, time() + 60 * 60);
             setcookie('student_pnumber', $student_pnumber, time() + 60 * 60);
+            setcookie('student_Card', $student_Card, time() + 60 * 60);
         } else {
             $user = "style='display: none;'";
         }
@@ -253,21 +254,21 @@ if (isset($_COOKIE['cookieClass'])) {
             if (!isset($_POST['fees_last']) || strlen(trim($_POST['fees_last'])) < 1) {
             } else {
                 $fees_last = mysqli_real_escape_string($connection, $_POST['fees_last']);
-                $fees_last_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_last}', '{$today_date}')";
+                $fees_last_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `ST_name`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_last}', '{$_COOKIE['student_Card']}', '{$today_date}')";
                 $fees_last_insert_result = mysqli_query($connection, $fees_last_insert);
             }
             //this month fees update
             if (!isset($_POST['fees_this']) || strlen(trim($_POST['fees_this'])) < 1) {
             } else {
                 $fees_this = mysqli_real_escape_string($connection, $_POST['fees_this']);
-                $fees_this_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_this}', '{$today_date}')";
+                $fees_this_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `ST_name`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_this}', '{$_COOKIE['student_Card']}', '{$today_date}')";
                 $fees_this_insert_result = mysqli_query($connection, $fees_this_insert);
             }
             // next month fees update
             if (!isset($_POST['fees_next']) || strlen(trim($_POST['fees_next'])) < 1) {
             } else {
                 $fees_next = mysqli_real_escape_string($connection, $_POST['fees_next']);
-                $fees_next_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_next}', '{$today_date}')";
+                $fees_next_insert = "INSERT INTO `class_fees` (`ST_ID`, `Student_ID`, `Class`, `Year_month`, `ST_name`, `Date`) VALUES ('{$_COOKIE['ST_ID']}', '{$_COOKIE['student_ID']}', '{$_COOKIE['cookieClass']}', '{$fees_next}', '{$_COOKIE['student_Card']}', '{$today_date}')";
                 $fees_next_insert_result = mysqli_query($connection, $fees_next_insert);
             }
 
@@ -318,10 +319,11 @@ if (isset($_COOKIE['cookieClass'])) {
             if ($insert_attendance_result) {
                 header("location: attendance.php");
 
-                setcookie('full_name', NULL, -time() + 60 * 60);
-                setcookie('ST_ID', NULL, -time() + 60 * 60);
-                setcookie('student_ID', NULL, -time() + 60 * 60);
-                setcookie('student_pnumber', NULL, -time() + 60 * 60);
+                setcookie('full_name', '', -time() + 60 * 60);
+                setcookie('ST_ID', '', -time() + 60 * 60);
+                setcookie('student_ID', '', -time() + 60 * 60);
+                setcookie('student_pnumber', '', -time() + 60 * 60);
+                setcookie('student_Card', '', -time() + 60 * 60);
             }
         }
     }
@@ -348,6 +350,9 @@ if (isset($_COOKIE['cookieClass'])) {
         if (mysqli_num_rows($ttt_result) == 1) {
             $ttt_fetch = mysqli_fetch_assoc($ttt_result);
             $ttt_name = $ttt_fetch['Tute_name'];
+        } else {
+            $ttt_name = "";
+            $display_input = "none";
         }
     } else {
         $last_tute_ID = 0;
@@ -544,18 +549,84 @@ if (isset($_COOKIE['cookieClass'])) {
                                     <label for="fees"> Fees :</label>
                                     <br><br>
                                     <div class="fees_month">
-                                        <p>
-                                            <input type="checkbox" name="fees_last" id="fees_last" value=" <?= $last_year . " " . $last_month_name ?> ">
-                                            <label for="fees_last"> : <?= $last_month_name; ?> </label>
-                                        </p>
-                                        <p>
-                                            <input type="checkbox" name="fees_this" id="fees_this" value=" <?= $this_year . " " . $this_month_name ?> ">
-                                            <label for="fees_this"> : <?= $this_month_name; ?> </label>
-                                        </p>
-                                        <p>
-                                            <input type="checkbox" name="fees_next" id="fees_next" value=" <?= $next_year . " " . $next_month_name ?> ">
-                                            <label for="fees_next"> : <?= $next_month_name; ?> </label>
-                                        </p>
+                                        <?php
+                                        $lst_yer_mnth = " " . $last_year . " " . $last_month_name . " ";
+
+                                        $query = "SELECT `Year_month` FROM `class_fees` WHERE `Year_month` = '$lst_yer_mnth' AND `Student_ID` = '{$class_code}{$st_id}' AND `Class` = '{$_COOKIE['cookieClass']}'";
+                                        $result = mysqli_query($connection, $query);
+
+                                        // Check if a matching record exists
+                                        if (mysqli_num_rows($result) > 0) {
+                                        ?>
+                                            <p>
+                                                <input type="checkbox" value="<?= $lst_yer_mnth ?>" disabled checked>
+                                                <label> : <?= $last_month_name; ?> </label>
+                                            </p>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <p>
+                                                <input type="checkbox" name="fees_last" id="fees_last" value="<?= $lst_yer_mnth ?>">
+                                                <label for="fees_last"> : <?= $last_month_name; ?> </label>
+                                            </p>
+                                        <?php
+                                        }
+                                        ?>
+
+
+
+
+
+                                        <?php
+                                        $this_yer_mnth = " " . $this_year . " " . $this_month_name . " ";
+
+                                        $query2 = "SELECT `Year_month` FROM `class_fees` WHERE `Year_month` = '$this_yer_mnth' AND `Student_ID` = '{$class_code}{$st_id}' AND `Class` = '{$_COOKIE['cookieClass']}'";
+                                        $result2 = mysqli_query($connection, $query2);
+
+                                        // Check if a matching record exists
+                                        if (mysqli_num_rows($result2) > 0) {
+                                        ?>
+                                            <p>
+                                                <input type="checkbox" value="<?= $this_yer_mnth ?>" disabled checked>
+                                                <label> : <?= $this_month_name; ?> </label>
+                                            </p>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <p>
+                                                <input type="checkbox" name="fees_this" id="fees_this" value="<?= $this_yer_mnth; ?>">
+                                                <label for="fees_this"> : <?= $this_month_name; ?> </label>
+                                            </p>
+                                        <?php
+                                        }
+                                        ?>
+
+
+
+
+                                        <?php
+                                        $next_yer_mnth = " " . $next_year . " " . $next_month_name . " ";
+
+                                        $query2 = "SELECT `Year_month` FROM `class_fees` WHERE `Year_month` = '$next_yer_mnth' AND `Student_ID` = '{$class_code}{$st_id}' AND `Class` = '{$_COOKIE['cookieClass']}'";
+                                        $result2 = mysqli_query($connection, $query2);
+
+                                        // Check if a matching record exists
+                                        if (mysqli_num_rows($result2) > 0) {
+                                        ?>
+                                            <p>
+                                                <input type="checkbox" value="<?= $next_yer_mnth ?>" disabled checked>
+                                                <label> : <?= $next_month_name; ?> </label>
+                                            </p>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <p>
+                                                <input type="checkbox" name="fees_next" id="fees_next" value="<?= $next_yer_mnth ?>">
+                                                <label for="fees_next"> : <?= $next_month_name; ?> </label>
+                                            </p>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                     <p style="<?= $tute; ?>">
                                         <label for="tname"> Tute :</label>

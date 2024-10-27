@@ -5,7 +5,8 @@
                 <img src="assect/img/imgs/logo.png" alt="logo">
             </span>
             <div class="text header-text">
-                <span class="name"> Mr.ChemistrY </span>
+                <span class="name"> Mr.Maths </span>
+                <br>
                 <span class="profession"> student management system </span>
             </div>
 

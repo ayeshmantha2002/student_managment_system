@@ -14,11 +14,11 @@ if (isset($_POST['delete_ID'])) {
     $delete_attendance_result = mysqli_query($connection, $delete_attendance);
 
     // tutes
-    $check_tutes = "DELETE FROM `deliverd_tute` WHERE `ST_ID` = {$_POST['ST_ID']} AND `Class` = '{$_COOKIE['cookieClass']}' AND `Date` = '{$today}' ORDER BY `ST_ID` DESC LIMIT 3";
+    $check_tutes = "DELETE FROM `deliverd_tute` WHERE `ST_ID` = {$_POST['ST_ID']} AND `Class` = '{$_COOKIE['cookieClass']}' AND `Date` = '{$today}'";
     $check_tutes_result = mysqli_query($connection, $check_tutes);
 
     // tutes
-    $check_tutes = "DELETE FROM `class_fees` WHERE `ST_ID` = {$_POST['ST_ID']} AND `Class` = '{$_COOKIE['cookieClass']}' AND `Date` = '{$today}' ORDER BY `ST_ID` DESC LIMIT 3";
+    $check_tutes = "DELETE FROM `class_fees` WHERE `ST_ID` = {$_POST['ST_ID']} AND `Class` = '{$_COOKIE['cookieClass']}' AND `Date` = '{$today}'";
     $check_tutes_result = mysqli_query($connection, $check_tutes);
 }
 

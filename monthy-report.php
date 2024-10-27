@@ -24,9 +24,13 @@ if (isset($_COOKIE['ID'])) {
     }
     ?>
     <style>
-        .low-attendance {
-            background-color: #ffcccc;
-            /* Light red background */
+        .students {
+            width: 100%;
+            height: calc(100vh - 80px);
+            overflow: scroll;
+            border-left: 1px solid var(--shadow);
+            padding: 0 30px;
+            box-sizing: border-box;
         }
     </style>
 
@@ -71,6 +75,29 @@ if (isset($_COOKIE['ID'])) {
                                 $yr = mysqli_real_escape_string($connection, $_POST['yr']);
                                 $month_date = mysqli_real_escape_string($connection, $_POST['month_date']);
                                 $month = $yr . "-" . $month_date;
+
+                                $months = [
+                                    "01" => "January",
+                                    "02" => "February",
+                                    "03" => "March",
+                                    "04" => "April",
+                                    "05" => "May",
+                                    "06" => "June",
+                                    "07" => "July",
+                                    "08" => "August",
+                                    "09" => "September",
+                                    "10" => "October",
+                                    "11" => "November",
+                                    "12" => "December"
+                                ];
+
+                                if (array_key_exists($month_date, $months)) {
+                                    $filter_month = $months[$month_date];
+                                } else {
+                                    $filter_month = "Invalid Month";
+                                }
+
+                                $month_fees = $yr . " " . $filter_month;
 
                                 $student_query = "SELECT * FROM `student` WHERE `Class` = '$date_class' AND `Student_ID` LIKE '%$class_location%'";
                                 $student_result = mysqli_query($connection, $student_query);
@@ -141,13 +168,13 @@ if (isset($_COOKIE['ID'])) {
 
                                         $annual_attendance_percentage = ($annual_total_days > 0) ? ($annual_attendance_count / $annual_total_days) * 100 : 0;
 
-                                        $fees_query = "SELECT * FROM `class_fees` WHERE `Date` LIKE '%$month%' AND `Student_ID` = '$Student_ID' LIMIT 1";
+                                        $fees_query = "SELECT * FROM `class_fees` WHERE `Year_month` = ' $month_fees ' AND `Student_ID` = '$Student_ID' AND `Class` = '$date_class' LIMIT 3";
                                         $fees_result = mysqli_query($connection, $fees_query);
 
                                         $paid = (mysqli_num_rows($fees_result) > 0) ? "Paid" : "-";
-
                                         $row_class = $annual_attendance_percentage < 80 ? 'low-attendance' : '';
                                         $row_class .= $paid === "-" ? ' low-fees' : '';
+
 
                                         echo "<tr class='$row_class'>
                                             <td>" . $students_list['Student_ID'] . "</td>
@@ -167,7 +194,7 @@ if (isset($_COOKIE['ID'])) {
                         <div class="attendance_details">
                             <h2 style="text-align: center;">MONTHLY REPORT</h2>
                             <br><br>
-                            <h3>The days of classes:</h3>
+                            <h3 style="text-align: center;">The days of classes:</h3>
                             <br>
                             <?php
                             if (!empty($data)) {
@@ -176,7 +203,33 @@ if (isset($_COOKIE['ID'])) {
                                 }
                             }
                             ?>
+                            <br><br>
+
+                            <!-- Card Details Section -->
+                            <div class="card-details">
+                                <h3 style="text-align: center;">Card Details:</h3>
+                                <br>
+                                <?php
+                                // Query to get card details
+                                $full_card_query = "SELECT COUNT(*) as full_card_count FROM `class_fees` WHERE `ST_name` = 'full' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
+                                $half_card_query = "SELECT COUNT(*) as half_card_count FROM `class_fees` WHERE `ST_name` = 'half' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
+                                $free_card_query = "SELECT COUNT(*) as free_card_count FROM `class_fees` WHERE `ST_name` = 'free' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
+
+                                $full_card_result = mysqli_query($connection, $full_card_query);
+                                $half_card_result = mysqli_query($connection, $half_card_query);
+                                $free_card_result = mysqli_query($connection, $free_card_query);
+
+                                $full_card_count = mysqli_fetch_assoc($full_card_result)['full_card_count'];
+                                $half_card_count = mysqli_fetch_assoc($half_card_result)['half_card_count'];
+                                $free_card_count = mysqli_fetch_assoc($free_card_result)['free_card_count'];
+
+                                echo "<h4>Full Cards: $full_card_count</h4>";
+                                echo "<h4>Half Cards: $half_card_count</h4>";
+                                echo "<h4>Free Cards: $free_card_count</h4>";
+                                ?>
+                            </div>
                         </div>
+
                         <div class="attendance_filter">
                             <form action="download_report.php" method="post">
                                 <h2>Download Report</h2>

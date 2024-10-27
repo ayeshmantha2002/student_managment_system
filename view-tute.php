@@ -141,7 +141,7 @@ $tutes_result = mysqli_query($connection, $tutes);
                                 $Date = $tuteFetch['Date'];
 
                                 // check double tutes 
-                                $chech_tutes_list = "SELECT * FROM `deliverd_tute` WHERE `Student_ID` = '{$Student_ID}' AND `Tute_ID` = {$_GET['tute_id']}";
+                                $chech_tutes_list = "SELECT * FROM `deliverd_tute` WHERE `Student_ID` = '{$Student_ID}' AND `Tute_ID` = {$_GET['tute_id']} AND `Class` = '{$Class}'";
                                 $chech_tutes_list_result = mysqli_query($connection, $chech_tutes_list);
                                 if (mysqli_num_rows($chech_tutes_list_result) > 1) {
                                     echo "
