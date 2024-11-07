@@ -142,10 +142,14 @@ if (isset($_POST['monthly_submit'])) {
 
             $annual_attendance_percentage = ($annual_total_days > 0) ? ($annual_attendance_count / $annual_total_days) * 100 : 0;
 
-            $fees_query = "SELECT * FROM `class_fees` WHERE `Date` LIKE '%$month%' AND `Student_ID` = '$Student_ID' LIMIT 1";
+            $fees_query = "SELECT * FROM `class_fees` WHERE `Year_month` = ' $month_fees ' AND `Student_ID` = '$Student_ID' AND `Class` = '$date_class' LIMIT 3";
             $fees_result = mysqli_query($connection, $fees_query);
 
-            $paid = (mysqli_num_rows($fees_result) > 0) ? "Paid" : "-";
+            $paid = "-"; // Default value if no payment is found
+            if (mysqli_num_rows($fees_result) > 0) {
+                $row = mysqli_fetch_assoc($fees_result);
+                $paid = $row['Date']; // Assign the date of payment
+            }
 
             echo "<tr>
                     <td>" . $students_list['Student_ID'] . "</td>
@@ -159,9 +163,9 @@ if (isset($_POST['monthly_submit'])) {
     }
 
     // Add card details section
-    $full_card_query = "SELECT COUNT(*) as full_card_count FROM `class_fees` WHERE `ST_name` = 'full' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
-    $half_card_query = "SELECT COUNT(*) as half_card_count FROM `class_fees` WHERE `ST_name` = 'half' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
-    $free_card_query = "SELECT COUNT(*) as free_card_count FROM `class_fees` WHERE `ST_name` = 'free' AND `Year_month` = ' $month_fees ' AND `Class` = '$date_class'";
+    $full_card_query = "SELECT COUNT(*) as full_card_count FROM `class_fees` WHERE `ST_name` = 'full' AND `Date` LIKE '%$month%' AND `Class` = '$date_class'";
+    $half_card_query = "SELECT COUNT(*) as half_card_count FROM `class_fees` WHERE `ST_name` = 'half' AND `Date` LIKE '%$month%' AND `Class` = '$date_class'";
+    $free_card_query = "SELECT COUNT(*) as free_card_count FROM `class_fees` WHERE `ST_name` = 'free' AND `Date` LIKE '%$month%' AND `Class` = '$date_class'";
 
 
     $full_card_result = mysqli_query($connection, $full_card_query);

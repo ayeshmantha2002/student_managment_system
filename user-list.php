@@ -157,7 +157,9 @@ if (isset($_GET['remove_student_id'])) {
             <br>
             <div class="search">
                 <form method="post">
-                    <p> <input type="search" name="search" placeholder="Search student number or name." autofocus> </p>
+                    <p>
+                        <input type="search" id="search" name="search" placeholder="Search student number or name." autofocus>
+                    </p>
                 </form>
             </div>
             <br>
@@ -303,7 +305,7 @@ if (isset($_GET['remove_student_id'])) {
                         </form>
                     </div>
                 </div>
-                <div class="students">
+                <div class="students" id="searchResults">
                     <table>
                         <?php
                         if (mysqli_num_rows($student_list_result) > 0) {
@@ -407,6 +409,31 @@ if (isset($_GET['remove_student_id'])) {
     <script src="assect/js/secu.js"></script>
     <script src="assect/js/jquery.min.js"></script>
     <script src="assect/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#search").on("input", function() {
+                var query = $(this).val();
+
+                // Send AJAX request only if query is not empty
+                if (query.length > 0) {
+                    $.ajax({
+                        url: "search_student.php",
+                        method: "POST",
+                        data: {
+                            query: query
+                        },
+                        success: function(data) {
+                            $("#searchResults").html(data);
+                        }
+                    });
+                } else {
+                    // Clear the results if query is empty
+                    $("#searchResults").html("");
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

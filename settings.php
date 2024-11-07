@@ -16,7 +16,7 @@ if (isset($_POST['dark'])) {
     setcookie('dark', $_POST['dark'], time() + 60 * 60 * 24 * 20);
     header("location: settings.php");
 } elseif (isset($_POST['light'])) {
-    setcookie('dark', NULL, -time() + 60 * 60 * 24 * 20);
+    setcookie('dark', '', -time() + 60 * 60 * 24 * 20);
     header("location: settings.php");
 }
 
@@ -182,15 +182,21 @@ if (isset($_POST['branch_delete_id'])) {
                     <h2> ADMINS </h2>
                     <div class="adminslist">
                         <ul>
+                            <!-- Admin delete form -->
                             <?php
                             if (mysqli_num_rows($admin_list_result) > 0) {
                                 while ($fetch_admins = mysqli_fetch_assoc($admin_list_result)) {
                                     echo "
-                                    <form method='post'>
-                                    <input type='text' name='del_id' value='{$fetch_admins['ID']}' hidden>
-                                    <li> <span> {$fetch_admins['First_name']} {$fetch_admins['Last_name']} </span> <span> {$fetch_admins['Location']} </span> <span {$hidden}> <button type='submit'> delete </button> </span> </li>
-                                    </form>
-                                    ";
+                                        <form method='post' onsubmit='return confirmDelete();'>
+                                            <input type='hidden' name='del_id' value='{$fetch_admins['ID']}'>
+                                            <li> <span> {$fetch_admins['First_name']} {$fetch_admins['Last_name']} </span> 
+                                                <span> {$fetch_admins['Location']} </span> 
+                                                <span {$hidden}> 
+                                                    <button type='submit'>Delete</button> 
+                                                </span> 
+                                            </li>
+                                        </form>
+                                        ";
                                 }
                             }
                             ?>
@@ -200,15 +206,19 @@ if (isset($_POST['branch_delete_id'])) {
                         <h2> Branch Management </h2>
                         <br>
                         <ul>
+                            <!-- Branch delete form -->
                             <?php
                             $branch_list = "SELECT * FROM `location`";
                             $branch_list_result = mysqli_query($connection, $branch_list);
                             if (mysqli_num_rows($branch_list_result) > 0) {
                                 while ($branches = mysqli_fetch_assoc($branch_list_result)) {
                                     echo "
-                                    <form method='post'>
-                                        <input type='text' name='branch_delete_id' value='{$branches['ID']}' hidden>
-                                        <li> <span> {$branches['location']} </span> <span> {$branches['UID']} </span> <button type='submit' {$hidden}> delete </button></li>
+                                    <form method='post' onsubmit='return confirmDelete();'>
+                                        <input type='hidden' name='branch_delete_id' value='{$branches['ID']}'>
+                                        <li> <span> {$branches['location']} </span> 
+                                            <span> {$branches['UID']} </span> 
+                                            <button type='submit' {$hidden}>Delete</button>
+                                        </li>
                                     </form>
                                     ";
                                 }
@@ -346,6 +356,12 @@ if (isset($_POST['branch_delete_id'])) {
 
     <script src="assect/js/jquery.min.js"></script>
     <script src="assect/js/main.js"></script>
+
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this item?");
+        }
+    </script>
 </body>
 
 </html>
